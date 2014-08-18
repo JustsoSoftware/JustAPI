@@ -8,8 +8,7 @@
 
     <testsuites>
         <testsuite name="Local">
-            <directory suffix="Test.php">../../../../test</directory>
-            <directory suffix="Test.php">../../test</directory>
+            <directory suffix="Test.php">../../../**</directory>
         </testsuite>
     </testsuites>
 
@@ -23,9 +22,9 @@
 
     <filter>
         <blacklist>
-            <file>../../Autoloader.php</file>
-            <file>../../FrontController.php</file>
-            <file>../../SystemEnvironment.php</file>
+            <file>../Autoloader.php</file>
+            <file>../FrontController.php</file>
+            <file>../SystemEnvironment.php</file>
         </blacklist>
         <whitelist addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../../</directory>
