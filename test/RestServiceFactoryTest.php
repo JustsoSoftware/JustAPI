@@ -95,8 +95,8 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array('\Exception', '500 Server error'),
-            array('\justso\justso\DenyException', '403 Forbidden'),
-            array('\justso\justso\InvalidParameterException', '400 Bad Request'),
+            array('\justso\justapi\DenyException', '403 Forbidden'),
+            array('\justso\justapi\InvalidParameterException', '400 Bad Request'),
         );
     }
 
