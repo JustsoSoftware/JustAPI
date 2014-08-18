@@ -147,7 +147,7 @@ class RestServiceFactory
             $prefix = preg_replace('/\*$/', '', current($candidates));
             $info = $services[current($candidates)];
             if (strpos($info, 'file:') === 0) {
-                $appFile = Bootstrap::getInstance()->getAppRoot() . str_replace('file:', '', $info);
+                $appFile = Bootstrap::getInstance()->getAppRoot() . '/' . str_replace('file:', '', $info);
                 $config = json_decode(file_get_contents($appFile), true);
                 return $this->findServiceClassName($config['services'], str_replace($prefix, '', $serviceName));
             } else {
