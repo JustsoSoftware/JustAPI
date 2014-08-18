@@ -29,7 +29,7 @@
         <whitelist addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../../</directory>
             <exclude>
-                <directory suffix=".php">../../vendor</directory>
+                <directory suffix=".php">../conf</directory>
             </exclude>
         </whitelist>
     </filter>
