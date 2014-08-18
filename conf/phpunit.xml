@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="bootstrap.php"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         strict="true"
+         verbose="true">
+
+    <testsuites>
+        <testsuite name="Local">
+            <directory suffix="Test.php">../../../../test</directory>
+            <directory suffix="Test.php">../../test</directory>
+        </testsuite>
+    </testsuites>
+
+    <logging>
+        <log type="coverage-html" target="../../../../build/coverage" title="JumpStart"
+             charset="UTF-8" yui="true" highlight="true"
+             lowUpperBound="35" highLowerBound="70"/>
+        <log type="coverage-clover" target="../../../../build/clover.xml"/>
+        <log type="junit" target="../../../../build/phpunit-reports.xml" logIncompleteSkipped="false"/>
+    </logging>
+
+    <filter>
+        <blacklist>
+            <file>../../Autoloader.php</file>
+            <file>../../FrontController.php</file>
+            <file>../../SystemEnvironment.php</file>
+        </blacklist>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../../</directory>
+            <exclude>
+                <directory suffix=".php">../../vendor</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
+</phpunit>
