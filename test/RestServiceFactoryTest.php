@@ -65,7 +65,7 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $request = new RequestHelper();
         $request->set(array(), array('REQUEST_URI' => '/test', 'REQUEST_METHOD' => $method));
         $environment = new TestEnvironment($request);
-        $factory = new RestServiceFactory($environment, array('test' => '\justso\test\ServiceMock'));
+        $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\test\ServiceMock'));
         $factory->handleRequest();
         $this->assertSame($method . ' method not implemented for this URL', $environment->getResponseContent());
         $this->assertSame(1, ServiceMock::$called[strtolower($method) . 'Action']);
@@ -79,7 +79,7 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $request = new RequestHelper();
         $request->set(array(), array('REQUEST_URI' => '/test/123', 'REQUEST_METHOD' => 'GET'));
         $environment = new TestEnvironment($request);
-        $factory = new RestServiceFactory($environment, array('test/*' => '\justso\test\ServiceMock'));
+        $factory = new RestServiceFactory($environment, array('test/*' => '\justso\justapi\test\ServiceMock'));
         $factory->handleRequest();
         $this->assertSame('GET method not implemented for this URL', $environment->getResponseContent());
         $this->assertSame('test/123', ServiceMock::$lastName);
@@ -113,7 +113,7 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $request = new RequestHelper();
         $request->set(array(), array('REQUEST_URI' => '/test', 'REQUEST_METHOD' => 'GET'));
         $environment = new TestEnvironment($request);
-        $factory = new RestServiceFactory($environment, array('test' => '\justso\test\ServiceMock'));
+        $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\test\ServiceMock'));
         ServiceMock::$exception = $exception;
         $factory->handleRequest();
         $header = $environment->getResponseHeader();
@@ -129,7 +129,7 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $request = new RequestHelper();
         $request->set(array(), array('REQUEST_URI' => '/invalid', 'REQUEST_METHOD' => 'GET'));
         $environment = new TestEnvironment($request);
-        $factory = new RestServiceFactory($environment, array('test' => '\justso\test\ServiceMock'));
+        $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\test\ServiceMock'));
         $factory->handleRequest();
         $header = $environment->getResponseHeader();
         $this->assertTrue(in_array('Content-Type: text/plain; charset=utf-8', $header));
