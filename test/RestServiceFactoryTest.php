@@ -63,7 +63,7 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCallOfService($method)
     {
         $request = new RequestHelper();
-        $request->set(array(), array('REQUEST_URI' => '/test', 'REQUEST_METHOD' => $method));
+        $request->set(array(), array('PATH_INFO' => '/test', 'REQUEST_METHOD' => $method));
         $environment = new TestEnvironment($request);
         $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\test\ServiceMock'));
         $factory->handleRequest();
@@ -77,7 +77,7 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
     public function testWildcardService()
     {
         $request = new RequestHelper();
-        $request->set(array(), array('REQUEST_URI' => '/test/123', 'REQUEST_METHOD' => 'GET'));
+        $request->set(array(), array('PATH_INFO' => '/test/123', 'REQUEST_METHOD' => 'GET'));
         $environment = new TestEnvironment($request);
         $factory = new RestServiceFactory($environment, array('test/*' => '\justso\justapi\test\ServiceMock'));
         $factory->handleRequest();
@@ -111,7 +111,7 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
     public function testServiceFactoryCatchesExceptions($exception, $errCode)
     {
         $request = new RequestHelper();
-        $request->set(array(), array('REQUEST_URI' => '/test', 'REQUEST_METHOD' => 'GET'));
+        $request->set(array(), array('PATH_INFO' => '/test', 'REQUEST_METHOD' => 'GET'));
         $environment = new TestEnvironment($request);
         $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\test\ServiceMock'));
         ServiceMock::$exception = $exception;
@@ -127,7 +127,7 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
     public function testInvalidServiceName()
     {
         $request = new RequestHelper();
-        $request->set(array(), array('REQUEST_URI' => '/invalid', 'REQUEST_METHOD' => 'GET'));
+        $request->set(array(), array('PATH_INFO' => '/invalid', 'REQUEST_METHOD' => 'GET'));
         $environment = new TestEnvironment($request);
         $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\test\ServiceMock'));
         $factory->handleRequest();
