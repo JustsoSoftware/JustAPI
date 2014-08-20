@@ -50,10 +50,10 @@ class RestServiceFactory
     {
         try {
             $server = $this->environment->getRequestHelper()->getServerParams();
-            if (empty($server['REQUEST_URI']) || empty($server['REQUEST_METHOD'])) {
+            if (empty($server['PATH_INFO']) || empty($server['REQUEST_METHOD'])) {
                 throw new InvalidParameterException("Missing service specification.");
             }
-            $serviceName = preg_replace('/^\/(api\/)?(.*)(\?.*)?$/', '$2', $server['REQUEST_URI']);
+            $serviceName = preg_replace('/^\/(.*)(\?.*)?$/', '$1', $server['PATH_INFO']);
             $className = $this->findServiceClassName($this->services, $serviceName);
 
             $allowedOrigins = Bootstrap::getInstance()->getAllowedOrigins();
