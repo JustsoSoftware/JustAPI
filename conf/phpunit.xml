@@ -27,9 +27,9 @@
             <file>../SystemEnvironment.php</file>
         </blacklist>
         <whitelist addUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">../../</directory>
+            <directory suffix=".php">../../../justso</directory>
             <exclude>
-                <directory suffix=".php">../conf</directory>
+                <file>bootstrap.php</file>
             </exclude>
         </whitelist>
     </filter>
