@@ -91,15 +91,9 @@ class RestServiceFactory
     {
         $server = $this->environment->getRequestHelper()->getServerParams();
         $params = array();
-        $postvars = array();
-        if (isset($server['QUERY_STRING'])) {
-            parse_str($server['QUERY_STRING'], $params);
-        }
+        parse_str(isset($server['QUERY_STRING']) ? $server['QUERY_STRING'] : '', $params);
         $body = file_get_contents("php://input");
-        $content_type = false;
-        if (isset($server['CONTENT_TYPE'])) {
-            $content_type = $server['CONTENT_TYPE'];
-        }
+        $content_type = isset($server['CONTENT_TYPE']) ? $server['CONTENT_TYPE'] : '';
         if (strchr($content_type, ';') !== false) {
             list($content_type) = preg_split('/;/', $content_type);
         }
@@ -107,23 +101,15 @@ class RestServiceFactory
             case "application/json":
                 $body_params = json_decode($body);
                 if ($body_params) {
-                    foreach ($body_params as $param_name => $param_value) {
-                        $params[$param_name] = $param_value;
-                    }
+                    $params = array_merge($params, $body_params);
                 }
                 break;
 
             case "application/x-www-form-urlencoded":
+                $postvars = array();
                 parse_str($body, $postvars);
-                foreach ($postvars as $field => $value) {
-                    $params[$field] = $value;
-                }
+                $params = array_merge($params, $postvars);
                 break;
-
-            default:
-                // we could parse other supported formats here
-                break;
-
         }
         $environment->getRequestHelper()->fillWithData($params);
     }
