@@ -82,8 +82,8 @@ class Bootstrap
         if (self::$instance === null) {
             // @codeCoverageIgnoreStart
             self::$instance = new self();
-            // @codeCoverageIgnoreEnd
         }
+        // @codeCoverageIgnoreEnd
         return self::$instance;
     }
 

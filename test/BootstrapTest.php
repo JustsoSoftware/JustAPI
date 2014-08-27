@@ -8,6 +8,7 @@
  */
 
 namespace justso\justapi\test;
+
 use justso\justapi\Bootstrap;
 
 /**
@@ -76,6 +77,27 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     {
         $bootstrap = $this->getBootstrap();
         $this->assertSame('', $bootstrap->getAllowedOrigins());
+    }
+
+    public function provideInvalidConfigurations()
+    {
+        return array(
+            array(array()),
+            array(array('environments' => array())),
+            array(array('environments' => array('test' => array()))),
+        );
+    }
+
+    /**
+     * Tests setting an invalid configuration.
+     *
+     * @dataProvider provideInvalidConfigurations
+     * @expectedException \justso\justapi\InvalidParameterException
+     */
+    public function testSetTestConfigurationWithIncompleteConfiguration($config)
+    {
+        $bootstrap = Bootstrap::getInstance();
+        $bootstrap->setTestConfiguration('/var/www', $config);
     }
 
     /**
