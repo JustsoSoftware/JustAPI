@@ -57,9 +57,6 @@ Here is a complete example for such a config.json file:
     "services": {
         "justtexts/*": "file:vendor/justso/justtexts/services.json",
         "justgen/*":   "file:vendor/justso/justgen/services.json"
-    },
-    "pages": {
-        "index": "Index"
     }
 }
 ```
