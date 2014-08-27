@@ -36,6 +36,7 @@ class Bootstrap
     /**
      * Initializes the system.
      * The file 'config.json' in the application folder is read and autoloading of the specified packages is configured.
+     * @codeCoverageIgnore
      */
     private function __construct()
     {
@@ -79,7 +80,9 @@ class Bootstrap
     public static function getInstance()
     {
         if (self::$instance === null) {
+            // @codeCoverageIgnoreStart
             self::$instance = new self();
+            // @codeCoverageIgnoreEnd
         }
         return self::$instance;
     }
