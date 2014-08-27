@@ -9,6 +9,7 @@
 
 namespace justso\justapi\test;
 
+use justso\justapi\Bootstrap;
 use justso\justapi\RequestHelper;
 
 /**
@@ -44,6 +45,15 @@ class ServiceTestBase extends \PHPUnit_Framework_TestCase
         $request = new RequestHelper();
         $request->fillWithData($params, array('HTTP_HOST' => 'localhost'));
         return new TestEnvironment($request, $header);
+    }
+
+    /**
+     * Reset configuration after tests.
+     */
+    protected function tearDown()
+    {
+        parent::tearDown();
+        Bootstrap::getInstance()->resetConfiguration();
     }
 
 }
