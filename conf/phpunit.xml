@@ -28,9 +28,6 @@
         </blacklist>
         <whitelist addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../../../justso</directory>
-            <exclude>
-                <file>bootstrap.php</file>
-            </exclude>
         </whitelist>
     </filter>
 
