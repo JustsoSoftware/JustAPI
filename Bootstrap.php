@@ -160,8 +160,9 @@ class Bootstrap
             if ($info['approot'] === self::$appRoot) {
                 self::$environment = $environment;
                 self::$info = $info;
-                break;
+                return;
             }
         }
+        throw new InvalidParameterException("Environment for cwd='" . self::$appRoot . "' not found");
     }
 }
