@@ -121,4 +121,13 @@ class RequestHelperTest extends \PHPUnit_Framework_TestCase
         $request->set(array('foo' => $val));
         $request->$func('foo');
     }
+
+    public function testIsParamSet()
+    {
+        $request = new RequestHelper();
+        $request->set();
+        $this->assertFalse($request->isParamSet('foo'));
+        $request->set(array('foo' => 'bar'));
+        $this->assertTrue($request->isParamSet('foo'));
+    }
 }
