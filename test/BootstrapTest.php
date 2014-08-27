@@ -25,10 +25,13 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfig()
     {
-        $config = array('hello' => 'world', 'environments' => array('test' => array('approot' => '/my/approot')));
+        $config = array(
+            'hello' => 'world',
+            'environments' => array('test' => array('approot' => '/my/approot'))
+        );
 
         $bootstrap = Bootstrap::getInstance();
-        $bootstrap->setTestConfiguration('/my/test/path', $config);
+        $bootstrap->setTestConfiguration('/my/approot', $config);
         $this->assertSame($config, $bootstrap->getConfiguration());
     }
 
