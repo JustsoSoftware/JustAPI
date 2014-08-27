@@ -28,13 +28,20 @@ class Bootstrap
 
     private static $config;
 
+    private static $environment;
+
+    private static $info;
+
     /**
-     * Initializes the system
+     * Initializes the system.
+     * The file 'config.json' in the application folder is read and autoloading of the specified packages is configured.
      */
     private function __construct()
     {
         self::$appRoot = dirname(dirname(dirname(__DIR__)));
         self::$config = json_decode(file_get_contents(self::$appRoot . '/config.json'), true);
+        $this->setEnvironment();
+
         $packages = array_merge(array('justso'), self::$config['packages']);
         foreach ($packages as $package) {
             $autoloader = new Autoloader($package, self::$appRoot . '/vendor');
@@ -43,34 +50,40 @@ class Bootstrap
     }
 
     /**
-     * @param null $domain
+     * Sets the configuration for testing purposes - don't use for other things.
+     * Autoloading is initialized only on boot and will not be changed afterwards.
+     *
+     * @param string $appRoot Simulated application root folder
+     * @param mixed  $config  New test configuration
+     */
+    public function setTestConfiguration($appRoot, $config)
+    {
+        self::$appRoot = $appRoot;
+        self::$config = $config;
+        $this->setEnvironment();
+    }
+
+    /**
+     * Returns the Bootstrap instance.
      *
      * @return Bootstrap
      */
-    public static function getInstance($domain = null)
+    public static function getInstance()
     {
         if (self::$instance === null) {
-            self::$instance = new self($domain);
+            self::$instance = new self();
         }
         return self::$instance;
     }
 
     /**
-     * Returns the installation type (may be 'development', 'autotest', 'integration' or 'production'.
+     * Returns the installation type, which is the name of the current environment, e.g. "development" or "production".
      *
      * @return string
      */
     public function getInstallationType()
     {
-        if (preg_match('/^\/var\/lib\/jenkins\//', __FILE__)) {
-            return 'autotest';
-        } elseif (preg_match('/^\/var\/www\/test\//', __FILE__)) {
-            return 'integration';
-        } elseif (preg_match('/^\/var\/www\/prod\//', __FILE__)) {
-            return 'production';
-        } else {
-            return 'development';
-        }
+        return self::$environment;
     }
 
     /**
@@ -80,18 +93,7 @@ class Bootstrap
      */
     public function getAllowedOrigins()
     {
-        $allowedHosts = array(
-            'development' => 'http://local.',
-            'autotest'    => 'http://local.',
-            'integration' => 'https://test.',
-            'production'  => 'https://',
-        );
-        $type = $this->getInstallationType();
-        if (isset($allowedHosts[$type])) {
-            return $allowedHosts[$type] . self::$config['domain'];
-        } else {
-            return '';
-        }
+        return empty(self::$info['origins']) ? '' : self::$info['origins'];
     }
 
     /**
@@ -99,18 +101,7 @@ class Bootstrap
      */
     public function getApiUrl()
     {
-        $apiURLs = array(
-            'development' => 'http://localapi.',
-            'autotest'    => 'http://autotestapi.',
-            'integration' => 'https://testapi.',
-            'production'  => 'https://api.',
-        );
-        $type = $this->getInstallationType();
-        if (isset($apiURLs[$type])) {
-            return $apiURLs[$type] . self::$config['domain'] . '/';
-        } else {
-            return '';
-        }
+        return empty(self::$info['apiurl']) ? $this->getWebAppUrl() . '/api' : self::$info['apiurl'];
     }
 
     /**
@@ -118,18 +109,7 @@ class Bootstrap
      */
     public function getWebAppUrl()
     {
-        $webAppUrls = array(
-            'development' => 'http://local.' . self::$config['domain'] . '/',
-            'autotest'    => 'http://localhost',
-            'integration' => 'https://test.' . self::$config['domain'] . '/',
-            'production'  => 'https://' . self::$config['domain'] . '/',
-        );
-        $type = $this->getInstallationType();
-        if (isset($webAppUrls[$type])) {
-            return $webAppUrls[$type];
-        } else {
-            return '';
-        }
+        return empty(self::$info['appurl']) ? 'http://localhost' : self::$info['appurl'];
     }
 
     /**
@@ -159,5 +139,29 @@ class Bootstrap
     {
         self::$config = $config;
         file_put_contents(self::$appRoot . '/config.json', json_encode($config, JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * Updates the current installation environment on base of configuration parameters.
+     *
+     * @throws InvalidParameterException if configuration is not sufficient
+     */
+    private function setEnvironment()
+    {
+        if (empty(self::$config['environments'])) {
+            throw new InvalidParameterException('config.json should contain information about environments');
+        }
+        foreach (self::$config['environments'] as $environment => $info) {
+            if (empty($info['approot'])) {
+                throw new InvalidParameterException(
+                    "config.json environment '$environment' should contain at least 'approot'"
+                );
+            }
+            if ($info['approot'] === self::$appRoot) {
+                self::$environment = $environment;
+                self::$info = $info;
+                break;
+            }
+        }
     }
 }
