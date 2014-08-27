@@ -85,6 +85,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
             array(array()),
             array(array('environments' => array())),
             array(array('environments' => array('test' => array()))),
+            array(array('environments' => array('test' => array('approot' => '/unknown/path')))),
         );
     }
 
