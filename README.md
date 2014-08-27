@@ -7,16 +7,62 @@ It works as a front controller to call an appropriate service class for the requ
 ## Setup
 
 Checkout as vendor/justso/justapi
-Create a config.json file containing the following attributes:
+Create a config.json file containing at least the following attributes:
 
 ```
   domain: FQDN of domain.
   packages: List of packages to be used by the PHP autoloader. They should be located directly under 'vendor'.
   services: List of services, having a pattern as key and a service locator as value.
+  environments: List of environments your application is going to run in, e.g. 'production' or 'development'.
 ```
 
 The service locator is either a PHP class name or begins with the keyword 'file:', saying that service calls matching this pattern are handled by another list of services, located in the 'vendor' folder.
-The name after 'file:' is the location of the service
+The name after 'file:' is the location of the service.
+
+Each environment you specify, should contain at least the AppRoot which is the local path on the server where your code is checked out, e.g. '/var/www/'. Additionally, it should specify the URLs for the application and optionally the API.
+
+Here is a complete example for such a config.json file:
+
+```
+{
+    "domain": "justtexts.justso.de",
+    "languages": [
+        "de",
+        "en"
+    ],
+    "packages": [
+    ],
+    "environments": {
+        "production": {
+            "approot": "/var/www/prod",
+            "appurl":  "https://justtexts.justso.de",
+            "apiurl":  "https://justtexts.justso.de/api"
+        },
+        "integration": {
+            "approot": "/var/www/test",
+            "appurl":  "https://test.justtexts.justso.de",
+            "apiurl":  "https://test.justtexts.justso.de/api"
+        },
+        "autotest": {
+            "approot": "/var/lib/jenkins/jobs/JustTexts/workspace",
+            "appurl":  "http://localhost/justtexts",
+            "apiurl":  "http://localhost/justtexts/api"
+        },
+        "development": {
+            "approot": "/var/www/justtexts",
+            "appurl":  "http://local.justtexts.de",
+            "apiurl":  "http://local.justtexts.de/api"
+        }
+    },
+    "services": {
+        "justtexts/*": "file:vendor/justso/justtexts/services.json",
+        "justgen/*":   "file:vendor/justso/justgen/services.json"
+    },
+    "pages": {
+        "index": "Index"
+    }
+}
+```
 
 If using Apache, you should configure it to have
 
