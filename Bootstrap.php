@@ -39,10 +39,7 @@ class Bootstrap
      */
     private function __construct()
     {
-        self::$appRoot = dirname(dirname(dirname(__DIR__)));
-        self::$config = json_decode(file_get_contents(self::$appRoot . '/config.json'), true);
-        $this->setEnvironment();
-
+        $this->resetConfiguration();
         $packages = array_merge(array('justso'), self::$config['packages']);
         foreach ($packages as $package) {
             $autoloader = new Autoloader($package, self::$appRoot . '/vendor');
@@ -61,6 +58,16 @@ class Bootstrap
     {
         self::$appRoot = $appRoot;
         self::$config = $config;
+        $this->setEnvironment();
+    }
+
+    /**
+     * Resets the configuration to the one specified by config.json
+     */
+    public function resetConfiguration()
+    {
+        self::$appRoot = dirname(dirname(dirname(__DIR__)));
+        self::$config = json_decode(file_get_contents(self::$appRoot . '/config.json'), true);
         $this->setEnvironment();
     }
 

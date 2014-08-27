@@ -17,6 +17,12 @@ use justso\justapi\Bootstrap;
  */
 class BootstrapTest extends \PHPUnit_Framework_TestCase
 {
+    protected function tearDown()
+    {
+        parent::tearDown();
+        Bootstrap::getInstance()->resetConfiguration();
+    }
+
     public function testGetInstance()
     {
         $bootstrap = Bootstrap::getInstance();
