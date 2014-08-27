@@ -123,7 +123,7 @@ class RequestHelper
     {
         $value = $this->getParam($name, $default, $optional);
         if ($value !== null) {
-            if (!preg_match('/^\d*$/', $value)) {
+            if (!preg_match('/^\-?\d*$/', $value)) {
                 throw new InvalidParameterException("Parameter '{$name}' is invalid");
             }
             $value = (int)$value;
