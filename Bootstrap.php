@@ -11,6 +11,7 @@
 namespace justso\justapi;
 
 require_once("Autoloader.php");
+require_once("InvalidParameterException.php");
 
 /**
  * Singleton class which sets up autoloading
