@@ -149,7 +149,8 @@ class Bootstrap
     public function setConfiguration($config)
     {
         self::$config = $config;
-        file_put_contents(self::$appRoot . '/config.json', json_encode($config, JSON_PRETTY_PRINT));
+        $encoded = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        file_put_contents(self::$appRoot . '/config.json', $encoded);
     }
 
     /**
