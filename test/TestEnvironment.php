@@ -10,6 +10,7 @@
 namespace justso\justapi\test;
 
 use justso\justapi\AbstractSystemEnvironment;
+use justso\justapi\FileSystemInterface;
 use justso\justapi\RequestHelper;
 
 /**
@@ -38,6 +39,8 @@ class TestEnvironment extends AbstractSystemEnvironment
      * @var string
      */
     private $responseContent = '';
+
+    private $fileSystem = null;
 
     /**
      * @param RequestHelper $request
@@ -114,5 +117,16 @@ class TestEnvironment extends AbstractSystemEnvironment
     public function switchUser($user)
     {
         // Don't do anything in tests
+    }
+
+    /**
+     * @return FileSystemInterface
+     */
+    public function getFileSystem()
+    {
+        if ($this->fileSystem === null) {
+            $this->fileSystem = new FileSystemSandbox();
+        }
+        return $this->fileSystem;
     }
 }

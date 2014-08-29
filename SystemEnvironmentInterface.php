@@ -15,9 +15,15 @@ namespace justso\justapi;
 interface SystemEnvironmentInterface
 {
     /**
+     * @return FileSystemInterface
+     */
+    public function getFileSystem();
+
+    /**
      * @return RequestHelper
      */
     public function getRequestHelper();
+
     public function getHeader();
     public function sendHeader($header);
     public function sendResponse($response);

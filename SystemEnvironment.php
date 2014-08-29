@@ -78,4 +78,12 @@ class SystemEnvironment extends AbstractSystemEnvironment
     public function switchUser($user)
     {
     }
+
+    /**
+     * @return FileSystemInterface
+     */
+    public function getFileSystem()
+    {
+        return new FileSystem();
+    }
 }
