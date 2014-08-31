@@ -25,39 +25,33 @@ Here is a complete example for such a config.json file:
 
 ```
 {
-    "domain": "justtexts.justso.de",
-    "languages": [
-        "de",
-        "en"
-    ],
+    "domain": "my-project.de",
     "packages": [
     ],
     "environments": {
         "production": {
             "approot": "/var/www/prod",
-            "appurl":  "https://justtexts.justso.de",
-            "apiurl":  "https://justtexts.justso.de/api"
+            "appurl":  "https://my-project.de",
+            "apiurl":  "https://my-project.de/api"
         },
         "integration": {
             "approot": "/var/www/test",
-            "appurl":  "https://test.justtexts.justso.de",
-            "apiurl":  "https://test.justtexts.justso.de/api"
+            "appurl":  "https://test.my-project.de",
+            "apiurl":  "https://test.my-project.de/api"
         },
         "autotest": {
-            "approot": "/var/lib/jenkins/jobs/JustTexts/workspace",
-            "appurl":  "http://localhost/justtexts",
-            "apiurl":  "http://localhost/justtexts/api"
+            "approot": "/var/lib/jenkins/jobs/my-project/workspace",
+            "appurl":  "http://localhost/my-project",
+            "apiurl":  "http://localhost/my-project/api"
         },
         "development": {
-            "approot": "/var/www/justtexts",
-            "appurl":  "http://local.justtexts.de",
-            "apiurl":  "http://local.justtexts.de/api"
+            "approot": "/var/www/my-project",
+            "appurl":  "http://local.my-project.de",
+            "apiurl":  "http://local.my-project.de/api"
         }
     },
-    "services": {
-        "justtexts/*": "file:vendor/justso/justtexts/services.json",
-        "justgen/*":   "file:vendor/justso/justgen/services.json"
-    }
+    "services": [
+    ]
 }
 ```
 
