@@ -102,3 +102,7 @@ The service class can overwrite one or more of the following methods:
 - deleteAction
 
 Output is placed in $this->environment and never be printed or echoed.
+
+## Support & More
+
+If you need support, please contact us: http://justso.de
