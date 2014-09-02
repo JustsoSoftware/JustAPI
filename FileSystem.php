@@ -40,4 +40,9 @@ class FileSystem implements FileSystemInterface
     {
         return file_exists($fileName);
     }
+
+    public function glob($pattern)
+    {
+        return glob($pattern);
+    }
 }

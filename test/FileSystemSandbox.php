@@ -106,6 +106,11 @@ class FileSystemSandbox implements FileSystemInterface
         return $exists;
     }
 
+    public function glob($pattern)
+    {
+        return glob($this->path . $pattern);
+    }
+
     /**
      * Makes a path absolute.
      * In contrast to realpath(), it works with non-existing files and pathes as well.
