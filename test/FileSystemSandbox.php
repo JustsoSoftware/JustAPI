@@ -164,4 +164,9 @@ class FileSystemSandbox implements FileSystemInterface
     {
         $this->putFile($destination ?: $fileName, $this->realFileSystem->getFile($fileName));
     }
+
+    public function getRealPath($path)
+    {
+        return $this->path . $path;
+    }
 }
