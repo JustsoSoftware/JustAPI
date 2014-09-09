@@ -79,6 +79,11 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('', $bootstrap->getAllowedOrigins());
     }
 
+    /**
+     * Provides data for testSetTestConfigurationWithIncompleteConfiguration
+     * @return array
+     * @codeCoverageIgnore
+     */
     public function provideInvalidConfigurations()
     {
         return array(
@@ -99,7 +104,9 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     {
         $bootstrap = Bootstrap::getInstance();
         $bootstrap->setTestConfiguration('/var/www', $config);
+        // @codeCoverageIgnoreStart
     }
+    // @codeCoverageIgnoreEnd
 
     /**
      * @param string $environment

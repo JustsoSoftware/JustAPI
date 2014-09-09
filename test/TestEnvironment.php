@@ -113,6 +113,7 @@ class TestEnvironment extends AbstractSystemEnvironment
      * Changes the current user account. The permissions of this account are used for subsequent calls in this request.
      *
      * @param int $user key of user
+     * @codeCoverageIgnore
      */
     public function switchUser($user)
     {
