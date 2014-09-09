@@ -108,7 +108,11 @@ class FileSystemSandbox implements FileSystemInterface
 
     public function glob($pattern)
     {
-        return glob($this->path . $pattern);
+        $result = array();
+        foreach (glob($this->path . $pattern) as $entry) {
+            $result[] = preg_replace('/^' . str_replace('/', '\\/', $this->path) . '/', '', $entry);
+        }
+        return $result;
     }
 
     public function removeDir($path)
