@@ -46,6 +46,11 @@ class FileSystem implements FileSystemInterface
         return glob($pattern);
     }
 
+    public function removeDir($path)
+    {
+        rmdir($path);
+    }
+
     public function getRealPath($path)
     {
         return $path;

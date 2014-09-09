@@ -111,6 +111,12 @@ class FileSystemSandbox implements FileSystemInterface
         return glob($this->path . $pattern);
     }
 
+    public function removeDir($path)
+    {
+        $this->protocol[] = "removeDir($path)";
+        $this->realFileSystem->removeDir($this->path . $path);
+    }
+
     /**
      * Makes a path absolute.
      * In contrast to realpath(), it works with non-existing files and pathes as well.

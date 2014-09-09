@@ -24,5 +24,7 @@ interface FileSystemInterface
 
     public function glob($pattern);
 
+    public function removeDir($path);
+
     public function getRealPath($path);
 }
