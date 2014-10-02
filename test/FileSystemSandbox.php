@@ -106,6 +106,21 @@ class FileSystemSandbox implements FileSystemInterface
         return $exists;
     }
 
+    public function glob($pattern)
+    {
+        $result = array();
+        foreach (glob($this->path . $pattern) as $entry) {
+            $result[] = preg_replace('/^' . str_replace('/', '\\/', $this->path) . '/', '', $entry);
+        }
+        return $result;
+    }
+
+    public function removeDir($path)
+    {
+        $this->protocol[] = "removeDir($path)";
+        $this->realFileSystem->removeDir($this->path . $path);
+    }
+
     /**
      * Makes a path absolute.
      * In contrast to realpath(), it works with non-existing files and pathes as well.
@@ -158,5 +173,10 @@ class FileSystemSandbox implements FileSystemInterface
     public function copyFromRealFS($fileName, $destination = null)
     {
         $this->putFile($destination ?: $fileName, $this->realFileSystem->getFile($fileName));
+    }
+
+    public function getRealPath($path)
+    {
+        return $this->path . $path;
     }
 }

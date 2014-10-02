@@ -40,4 +40,19 @@ class FileSystem implements FileSystemInterface
     {
         return file_exists($fileName);
     }
+
+    public function glob($pattern)
+    {
+        return glob($pattern);
+    }
+
+    public function removeDir($path)
+    {
+        rmdir($path);
+    }
+
+    public function getRealPath($path)
+    {
+        return $path;
+    }
 }

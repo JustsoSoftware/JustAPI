@@ -99,7 +99,7 @@ class RestServiceFactory
         }
         switch ($content_type) {
             case "application/json":
-                $body_params = json_decode($body);
+                $body_params = json_decode($body, true);
                 if ($body_params) {
                     $params = array_merge($params, $body_params);
                 }

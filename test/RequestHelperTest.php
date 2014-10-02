@@ -47,7 +47,9 @@ class RequestHelperTest extends \PHPUnit_Framework_TestCase
         $request = new RequestHelper();
         $request->set();
         $request->getParam('foo');
+        // @codeCoverageIgnoreStart
     }
+    // @codeCoverageIgnoreEnd
 
     public function testGetIdentifierParam()
     {
@@ -97,6 +99,11 @@ class RequestHelperTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(array('a'), $request->getFileParam('foo'));
     }
 
+    /**
+     * Provides data for testThrowExceptionWhenUsedWithWrongParameter()
+     * @return array
+     * @codeCoverageIgnore
+     */
     public function provideParameterTestingFunctionNames()
     {
         return array(
@@ -120,7 +127,9 @@ class RequestHelperTest extends \PHPUnit_Framework_TestCase
         $request = new RequestHelper();
         $request->set(array('foo' => $val));
         $request->$func('foo');
+        // @codeCoverageIgnoreStart
     }
+    // @codeCoverageIgnoreEnd
 
     public function testIsParamSet()
     {

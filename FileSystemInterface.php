@@ -21,4 +21,10 @@ interface FileSystemInterface
     public function getFile($fileName);
 
     public function fileExists($fileName);
+
+    public function glob($pattern);
+
+    public function removeDir($path);
+
+    public function getRealPath($path);
 }
