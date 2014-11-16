@@ -27,7 +27,7 @@ class SystemEnvironment extends AbstractSystemEnvironment
     /**
      * @var string[]
      */
-    private $header;
+    private $header = array();
 
     /**
      * Initializes the SystemEnvironment
