@@ -27,7 +27,7 @@ class SystemEnvironment extends AbstractSystemEnvironment
     /**
      * @var string[]
      */
-    private $header;
+    private $header = array();
 
     /**
      * Initializes the SystemEnvironment
@@ -35,7 +35,9 @@ class SystemEnvironment extends AbstractSystemEnvironment
     public function __construct()
     {
         $this->request = new RequestHelper();
-        $this->header  = apache_request_headers();
+        if (function_exists('apache_request_headers')) {
+            $this->header  = apache_request_headers();
+        }
     }
 
     /**
