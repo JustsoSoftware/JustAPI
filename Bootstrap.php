@@ -40,10 +40,12 @@ class Bootstrap
      */
     private function __construct()
     {
+        $vendorPath = dirname(dirname(__DIR__));
         $this->resetConfiguration();
+        require_once($vendorPath . '/autoload.php');
         $packages = array_merge(array('justso'), self::$config['packages']);
         foreach ($packages as $package) {
-            $autoloader = new Autoloader($package, self::$appRoot . '/vendor');
+            $autoloader = new Autoloader($package, $vendorPath);
             $autoloader->register();
         }
     }
