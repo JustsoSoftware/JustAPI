@@ -70,6 +70,16 @@ class RequestHelper
     }
 
     /**
+     * Returns all parameters without any checks, so remember to check each parameter individually!
+     *
+     * @return array
+     */
+    public function getAllParams()
+    {
+        return $this->params;
+    }
+
+    /**
      * Returns a parameter value.
      *
      * @param string $name
