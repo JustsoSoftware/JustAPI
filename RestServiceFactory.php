@@ -60,7 +60,7 @@ class RestServiceFactory
             if ($allowedOrigins !== '') {
                 $this->environment->sendHeader('Access-Control-Allow-Origin: ' . $allowedOrigins);
                 $this->environment->sendHeader('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
-                $this->environment->sendHeader('Access-Control-Allow-Headers: Token');
+                $this->environment->sendHeader('Access-Control-Allow-Headers: Token, Content-Type, Origin, Accept');
             }
 
             $method = strtolower($server['REQUEST_METHOD']);
