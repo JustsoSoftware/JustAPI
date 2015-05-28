@@ -53,7 +53,7 @@ class RestServiceFactory
             if (empty($server['PATH_INFO']) || empty($server['REQUEST_METHOD'])) {
                 throw new InvalidParameterException("Missing service specification.");
             }
-            $serviceName = preg_replace('/^\/(.*)(\?.*)?$/', '$1', $server['PATH_INFO']);
+            $serviceName = preg_replace('/^\/(.*?)(\?.*)?$/', '$1', $server['PATH_INFO']);
             $className = $this->findServiceClassName($this->services, $serviceName);
 
             $allowedOrigins = Bootstrap::getInstance()->getAllowedOrigins();
