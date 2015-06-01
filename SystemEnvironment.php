@@ -88,4 +88,26 @@ class SystemEnvironment extends AbstractSystemEnvironment
     {
         return new FileSystem();
     }
+
+    /**
+     * @param string $name
+     * @param string $value
+     * @param int $expire
+     * @param string $path
+     * @param string $domain
+     * @param bool $secure
+     * @param bool $httpOnly
+     * @return bool
+     */
+    public function sendCookie(
+        $name,
+        $value = null,
+        $expire = null,
+        $path = null,
+        $domain = null,
+        $secure = null,
+        $httpOnly = null
+    ) {
+        return setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
+    }
 }

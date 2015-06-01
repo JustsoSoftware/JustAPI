@@ -26,6 +26,27 @@ interface SystemEnvironmentInterface
 
     public function getHeader();
     public function sendHeader($header);
+
+    /**
+     * @param string $name
+     * @param string $value
+     * @param int    $expire
+     * @param string $path
+     * @param string $domain
+     * @param bool   $secure
+     * @param bool   $httpOnly
+     * @return bool
+     */
+    public function sendCookie(
+        $name,
+        $value = null,
+        $expire = null,
+        $path = null,
+        $domain = null,
+        $secure = null,
+        $httpOnly = null
+    );
+
     public function sendResponse($response);
 
     /**
