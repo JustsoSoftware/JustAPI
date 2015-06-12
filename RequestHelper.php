@@ -231,4 +231,24 @@ class RequestHelper
         }
         return $value;
     }
+
+    /**
+     * Returns the value of the specified parameter if it is a hex code
+     *
+     * @param string $name
+     * @param string $default
+     * @param bool   $optional
+     * @return string
+     * @throws InvalidParameterException
+     */
+    public function getHexParam($name, $default = null, $optional = false)
+    {
+        $value = $this->getParam($name, $default, $optional);
+        if ($value !== null) {
+            if (!preg_match('/^[0-9a-f]+$/i', $value)) {
+                throw new InvalidParameterException("Parameter '{$name}' is invalid");
+            }
+        }
+        return $value;
+    }
 }
