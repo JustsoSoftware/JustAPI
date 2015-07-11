@@ -24,7 +24,11 @@ interface FileSystemInterface
 
     public function glob($pattern);
 
+    public function mkdir($dirName);
+
     public function removeDir($path);
 
     public function getRealPath($path);
+
+    public function rename($from, $to);
 }

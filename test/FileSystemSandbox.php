@@ -1,7 +1,7 @@
 <?php
 /**
  * Definition of class FileSystemSandbox
- * 
+ *
  * @copyright  2014-today Justso GmbH
  * @author     j.schirrmacher@justso.de
  * @package    justso\justapi\test
@@ -115,6 +115,12 @@ class FileSystemSandbox implements FileSystemInterface
         return $result;
     }
 
+    public function mkdir($dirName)
+    {
+        $this->protocol[] = "mkDir($dirName)";
+        $this->realFileSystem->mkdir($this->path . $dirName);
+    }
+
     public function removeDir($path)
     {
         $this->protocol[] = "removeDir($path)";
@@ -178,5 +184,11 @@ class FileSystemSandbox implements FileSystemInterface
     public function getRealPath($path)
     {
         return $this->path . $path;
+    }
+
+    public function rename($from, $to)
+    {
+        $this->protocol[] = "rename($from, $to)";
+        $this->realFileSystem->rename($this->path . $this->makeAbsolute($from), $this->path . $this->makeAbsolute($to));
     }
 }

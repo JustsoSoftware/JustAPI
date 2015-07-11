@@ -1,7 +1,7 @@
 <?php
 /**
  * Definition of class FileSystem
- * 
+ *
  * @copyright  2014-today Justso GmbH
  * @author     j.schirrmacher@justso.de
  * @package    justso\justapi
@@ -24,7 +24,7 @@ class FileSystem implements FileSystemInterface
     {
         $dirName = dirname($fileName);
         if (!file_exists($dirName)) {
-            mkdir($dirName, 0777, true);
+            $this->mkdir($dirName);
         }
         file_put_contents($fileName, $content);
     }
@@ -54,5 +54,15 @@ class FileSystem implements FileSystemInterface
     public function getRealPath($path)
     {
         return $path;
+    }
+
+    public function rename($from, $to)
+    {
+        rename($from, $to);
+    }
+
+    public function mkdir($dirName)
+    {
+        mkdir($dirName, 0777, true);
     }
 }
