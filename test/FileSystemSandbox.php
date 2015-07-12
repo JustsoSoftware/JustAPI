@@ -191,4 +191,10 @@ class FileSystemSandbox implements FileSystemInterface
         $this->protocol[] = "rename($from, $to)";
         $this->realFileSystem->rename($this->path . $this->makeAbsolute($from), $this->path . $this->makeAbsolute($to));
     }
+
+    public function appendLine($file, $line)
+    {
+        $this->protocol[] = "rename($file, $line)";
+        $this->realFileSystem->appendLine($this->path . $this->makeAbsolute($file), $line);
+    }
 }

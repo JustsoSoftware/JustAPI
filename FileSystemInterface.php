@@ -31,4 +31,6 @@ interface FileSystemInterface
     public function getRealPath($path);
 
     public function rename($from, $to);
+
+    public function appendLine($file, $line);
 }

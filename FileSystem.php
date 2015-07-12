@@ -65,4 +65,11 @@ class FileSystem implements FileSystemInterface
     {
         mkdir($dirName, 0777, true);
     }
+
+    public function appendLine($file, $line)
+    {
+        $fp = fopen($file, 'a');
+        fputs($fp, $line . "\n");
+        fclose($fp);
+    }
 }
