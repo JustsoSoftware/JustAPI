@@ -50,10 +50,18 @@ class RestServiceFactory
     {
         try {
             $server = $this->environment->getRequestHelper()->getServerParams();
-            if (empty($server['PATH_INFO']) || empty($server['REQUEST_METHOD'])) {
-                throw new InvalidParameterException("Missing service specification.");
+            if (empty($server['PATH_INFO'])) {
+                if (empty($server['REQUEST_URI'])) {
+                    throw new InvalidParameterException("Missing information about service URI");
+                }
+                $uri = $server['REQUEST_URI'];
+            } else {
+                $uri = $server['PATH_INFO'];
             }
-            $serviceName = preg_replace('/^\/(.*?)(\?.*)?$/', '$1', $server['PATH_INFO']);
+            if (empty($server['REQUEST_METHOD'])) {
+                throw new InvalidParameterException("Missing request method");
+            }
+            $serviceName = preg_replace('/^\/(.*?)(\?.*)?$/', '$1', $uri);
             $className = $this->findServiceClassName($this->services, $serviceName);
 
             $allowedOrigins = Bootstrap::getInstance()->getAllowedOrigins();
@@ -70,6 +78,9 @@ class RestServiceFactory
                 $service->setName($serviceName);
                 $this->extractParameters($this->environment);
                 $verb = $method . 'Action';
+                if (!method_exists($service, $verb)) {
+                    throw new InvalidParameterException("The request method is not defined in this service");
+                }
                 $service->$verb();
             }
         } catch (InvalidParameterException $e) {

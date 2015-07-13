@@ -130,4 +130,27 @@ class TestEnvironment extends AbstractSystemEnvironment
         }
         return $this->fileSystem;
     }
+
+    /**
+     * @param string $name
+     * @param string $value
+     * @param int $expire
+     * @param string $path
+     * @param string $domain
+     * @param bool $secure
+     * @param bool $httpOnly
+     * @return bool
+     */
+    public function sendCookie(
+        $name,
+        $value = null,
+        $expire = null,
+        $path = null,
+        $domain = null,
+        $secure = null,
+        $httpOnly = null
+    ) {
+        $this->sendHeader("Cookie-Set: $name=$value; $expire; $path; $domain; $secure; $httpOnly");
+        return true;
+    }
 }
