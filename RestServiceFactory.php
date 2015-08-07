@@ -50,38 +50,13 @@ class RestServiceFactory
     {
         try {
             $server = $this->environment->getRequestHelper()->getServerParams();
-            if (empty($server['PATH_INFO'])) {
-                if (empty($server['REQUEST_URI'])) {
-                    throw new InvalidParameterException("Missing information about service URI");
-                }
-                $uri = $server['REQUEST_URI'];
-            } else {
-                $uri = $server['PATH_INFO'];
-            }
-            if (empty($server['REQUEST_METHOD'])) {
-                throw new InvalidParameterException("Missing request method");
-            }
-            $serviceName = preg_replace('/^\/(.*?)(\?.*)?$/', '$1', $uri);
-            $className = $this->findServiceClassName($this->services, $serviceName);
+            $method = $this->getMethod($server);
+            $this->handleAllowedOrigins();
 
-            $allowedOrigins = Bootstrap::getInstance()->getAllowedOrigins();
-            if ($allowedOrigins !== '') {
-                $this->environment->sendHeader('Access-Control-Allow-Origin: ' . $allowedOrigins);
-                $this->environment->sendHeader('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
-                $this->environment->sendHeader('Access-Control-Allow-Headers: Token, Content-Type, Origin, Accept');
-            }
-
-            $method = strtolower($server['REQUEST_METHOD']);
             if ($method != 'options') {
-                /** @var $service RestService */
-                $service = new $className($this->environment, $serviceName);
-                $service->setName($serviceName);
-                $this->extractParameters($this->environment);
-                $verb = $method . 'Action';
-                if (!method_exists($service, $verb)) {
-                    throw new InvalidParameterException("The request method is not defined in this service");
-                }
-                $service->$verb();
+                $serviceName = preg_replace('/^\/(.*?)(\?.*)?$/', '$1', $this->getURI($server));
+                $className = $this->findServiceClassName($this->services, $serviceName);
+                $this->callService($className, $serviceName, $method);
             }
         } catch (InvalidParameterException $e) {
             $msg = $e->getMessage() ?: "Missing parameter";
@@ -152,5 +127,64 @@ class RestServiceFactory
             }
         }
         throw new \Exception("Unknown service: '{$serviceName}'");
+    }
+
+    private function handleAllowedOrigins()
+    {
+        $allowedOrigins = Bootstrap::getInstance()->getAllowedOrigins();
+        if ($allowedOrigins !== '') {
+            $this->environment->sendHeader('Access-Control-Allow-Origin: ' . $allowedOrigins);
+            $this->environment->sendHeader('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
+            $this->environment->sendHeader('Access-Control-Allow-Headers: Token, Content-Type, Origin, Accept');
+        }
+    }
+
+    /**
+     * @param $className
+     * @param $serviceName
+     * @param $method
+     * @throws InvalidParameterException
+     */
+    private function callService($className, $serviceName, $method)
+    {
+        /** @var $service RestService */
+        $service = new $className($this->environment, $serviceName);
+        $service->setName($serviceName);
+        $this->extractParameters($this->environment);
+        $verb = $method . 'Action';
+        if (!method_exists($service, $verb)) {
+            throw new InvalidParameterException("The request method is not defined in this service");
+        }
+        $service->$verb();
+    }
+
+    /**
+     * @param string[] $server
+     * @return string
+     * @throws InvalidParameterException
+     */
+    private function getMethod($server)
+    {
+        if (empty($server['REQUEST_METHOD'])) {
+            throw new InvalidParameterException("Missing request method");
+        }
+        return strtolower($server['REQUEST_METHOD']);
+    }
+
+    /**
+     * @param string[] $server
+     * @return string
+     * @throws InvalidParameterException
+     */
+    private function getURI($server)
+    {
+        if (!empty($server['PATH_INFO'])) {
+            $uri = $server['PATH_INFO'];
+        } elseif (!empty($server['REQUEST_URI'])) {
+            $uri = $server['REQUEST_URI'];
+        } else {
+            throw new InvalidParameterException("Missing information about service URI");
+        }
+        return $uri;
     }
 }
