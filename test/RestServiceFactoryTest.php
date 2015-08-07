@@ -37,7 +37,7 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
             ),
             $environment->getResponseHeader()
         );
-        $this->assertSame('Missing service specification.', $environment->getResponseContent());
+        $this->assertSame('Missing information about service URI', $environment->getResponseContent());
     }
 
     /**
