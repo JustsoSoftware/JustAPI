@@ -50,12 +50,12 @@ class RestServiceFactory
     {
         try {
             $server = $this->environment->getRequestHelper()->getServerParams();
+            $serviceName = preg_replace('/^\/(.*?)(\?.*)?$/', '$1', $this->getURI($server));
+            $className = $this->findServiceClassName($this->services, $serviceName);
             $method = $this->getMethod($server);
             $this->handleAllowedOrigins();
 
             if ($method != 'options') {
-                $serviceName = preg_replace('/^\/(.*?)(\?.*)?$/', '$1', $this->getURI($server));
-                $className = $this->findServiceClassName($this->services, $serviceName);
                 $this->callService($className, $serviceName, $method);
             }
         } catch (InvalidParameterException $e) {
