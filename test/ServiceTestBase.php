@@ -55,5 +55,4 @@ class ServiceTestBase extends \PHPUnit_Framework_TestCase
         parent::tearDown();
         Bootstrap::getInstance()->resetConfiguration();
     }
-
 }

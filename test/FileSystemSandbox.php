@@ -134,7 +134,8 @@ class FileSystemSandbox implements FileSystemInterface
      * @param string $path
      * @return string
      */
-    private function makeAbsolute($path) {
+    private function makeAbsolute($path)
+    {
         $path = str_replace(array('/', '\\'), DIRECTORY_SEPARATOR, $path);
         $parts = array_filter(explode(DIRECTORY_SEPARATOR, $path), 'strlen');
         $absolutes = array();
@@ -159,7 +160,7 @@ class FileSystemSandbox implements FileSystemInterface
     {
         $directoryIterator = new \RecursiveDirectoryIterator($dirPath, \FilesystemIterator::SKIP_DOTS);
         $iterator = new \RecursiveIteratorIterator($directoryIterator, \RecursiveIteratorIterator::CHILD_FIRST);
-        foreach($iterator as $path) {
+        foreach ($iterator as $path) {
             /** @var $path \DirectoryIterator */
             if ($path->isDir()) {
                 rmdir($path->getPathname());
