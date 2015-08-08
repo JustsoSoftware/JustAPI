@@ -1,7 +1,7 @@
 <?php
 /**
  * Definition of AbstractSystemEnvironment
- * 
+ *
  * @copyright  2014-today Justso GmbH
  * @author     j.schirrmacher@justso.de
  * @package    justso
