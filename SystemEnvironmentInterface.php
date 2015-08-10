@@ -72,4 +72,9 @@ interface SystemEnvironmentInterface
      * @param mixed $data
      */
     public function sendJSONResult($data);
+
+    /**
+     * @return Session
+     */
+    public function getSession();
 }

@@ -30,6 +30,11 @@ class SystemEnvironment extends AbstractSystemEnvironment
     private $header = array();
 
     /**
+     * @var Session
+     */
+    private $session;
+
+    /**
      * Initializes the SystemEnvironment
      */
     public function __construct()
@@ -38,6 +43,7 @@ class SystemEnvironment extends AbstractSystemEnvironment
         if (function_exists('apache_request_headers')) {
             $this->header  = apache_request_headers();
         }
+        $this->session = new Session();
     }
 
     /**
@@ -109,5 +115,13 @@ class SystemEnvironment extends AbstractSystemEnvironment
         $httpOnly = null
     ) {
         return setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
+    }
+
+    /**
+     * @return Session
+     */
+    public function getSession()
+    {
+        return $this->session;
     }
 }

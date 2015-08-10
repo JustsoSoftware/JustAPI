@@ -12,6 +12,7 @@ namespace justso\justapi\test;
 use justso\justapi\AbstractSystemEnvironment;
 use justso\justapi\FileSystemInterface;
 use justso\justapi\RequestHelper;
+use justso\justapi\SessionInterface;
 
 /**
  * Handles the outer world interface for tests
@@ -43,6 +44,11 @@ class TestEnvironment extends AbstractSystemEnvironment
     private $fileSystem = null;
 
     /**
+     * @var SessionInterface
+     */
+    private $session;
+
+    /**
      * @param RequestHelper $request
      * @param string[] $header
      */
@@ -50,6 +56,7 @@ class TestEnvironment extends AbstractSystemEnvironment
     {
         $this->request = $request;
         $this->header  = $header;
+        $this->session = new TestSession();
     }
 
     /**
@@ -152,5 +159,13 @@ class TestEnvironment extends AbstractSystemEnvironment
     ) {
         $this->sendHeader("Cookie-Set: $name=$value; $expire; $path; $domain; $secure; $httpOnly");
         return true;
+    }
+
+    /**
+     * @return SessionInterface
+     */
+    public function getSession()
+    {
+        return $this->session;
     }
 }
