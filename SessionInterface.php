@@ -19,4 +19,4 @@ interface SessionInterface
     public function getId();
     public function isValueSet($name);
     public function activate();
- }
+}
