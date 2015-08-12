@@ -7,7 +7,7 @@
  * @package    justso\justapi\test
  */
 
-namespace justso\justapi\test;
+namespace justso\justapi\testutil;
 
 use justso\justapi\SessionInterface;
 

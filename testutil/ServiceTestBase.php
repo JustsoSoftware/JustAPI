@@ -7,7 +7,7 @@
  * @package    justso\test
  */
 
-namespace justso\justapi\test;
+namespace justso\justapi\testutil;
 
 use justso\justapi\Bootstrap;
 use justso\justapi\RequestHelper;

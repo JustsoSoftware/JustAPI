@@ -7,7 +7,7 @@
  * @package    justso\test
  */
 
-namespace justso\justapi\test;
+namespace justso\justapi\testutil;
 
 use justso\justapi\AbstractSystemEnvironment;
 use justso\justapi\FileSystemInterface;
