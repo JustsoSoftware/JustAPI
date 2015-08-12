@@ -8,7 +8,7 @@
 
     <testsuites>
         <testsuite name="Local">
-            <directory suffix="Test.php">../../../**</directory>
+            <directory suffix="Test.php">../../**</directory>
         </testsuite>
     </testsuites>
 
