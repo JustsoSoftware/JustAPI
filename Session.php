@@ -10,9 +10,9 @@
 namespace justso\justapi;
 
 /**
- * Class Session
+ * This class abstracts php session handling to prevent usage of super globals and instead use a normal object
  *
- * @package justso\justapi
+ * @codeCoverageIgnore
  */
 class Session implements SessionInterface
 {
