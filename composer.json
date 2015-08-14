@@ -1,0 +1,7 @@
+{
+  "name": "justso/justapi",
+  "description": "Simple REST API based on plain PHP.",
+  "require": {
+    "php": ">=5.4.0"
+  }
+}
