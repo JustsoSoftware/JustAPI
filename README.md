@@ -4,10 +4,17 @@ Simple REST API based on plain PHP.
 
 It works as a front controller to call an appropriate service class for the requested API call.
 
+## Installation
+
+### Composer
+  composer require justso/justapi:1.*
+
+### git
+  git clone git://github.com/JustsoSoftware/JustAPI.git vendor/justso/justapi
+  
 ## Setup
 
-Checkout as vendor/justso/justapi
-Create a config.json file containing at least the following attributes:
+Create a config.json file in your root folder containing at least the following attributes:
 
 ```
   domain: FQDN of domain.
