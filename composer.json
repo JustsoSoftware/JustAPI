@@ -1,7 +1,16 @@
 {
   "name": "justso/justapi",
+  "type": "library",
   "description": "Simple REST API based on plain PHP.",
-  "require": {
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Joachim Schirrmacher",
+      "email": "j.schirrmacher@justso.de",
+      "homepage": "http://digital-wachsen.de",
+      "role": "Developer"
+    }
+  ],  "require": {
     "php": ">=5.4.0"
   }
 }
