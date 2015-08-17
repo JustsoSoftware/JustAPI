@@ -184,4 +184,15 @@ class TestEnvironment extends AbstractSystemEnvironment
     {
         return $this->dic->newInstanceOf($name);
     }
+
+    /**
+     * Sets a new factory for the given name.
+     *
+     * @param string   $name
+     * @param callback $func
+     */
+    public function setDICEntry($name, $func)
+    {
+        $this->dic->setDICEntry($name, $func);
+    }
 }
