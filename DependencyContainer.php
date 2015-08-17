@@ -27,7 +27,7 @@ class DependencyContainer implements DependencyContainerInterface
     private $fs;
 
     /**
-     * @param SystemEnvironmentInterface $env
+     * @param FileSystemInterface $fs
      */
     public function __construct(FileSystemInterface $fs)
     {
