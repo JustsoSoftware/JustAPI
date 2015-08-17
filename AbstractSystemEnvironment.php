@@ -14,7 +14,7 @@ namespace justso\justapi;
  *
  * @package     justso
  */
-abstract class AbstractSystemEnvironment implements SystemEnvironmentInterface
+abstract class AbstractSystemEnvironment implements SystemEnvironmentInterface, DependencyContainerInterface
 {
     /**
      * Sends a standard HTTP response.
