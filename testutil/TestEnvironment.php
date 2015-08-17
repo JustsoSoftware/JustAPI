@@ -10,6 +10,7 @@
 namespace justso\justapi\testutil;
 
 use justso\justapi\AbstractSystemEnvironment;
+use justso\justapi\DependencyContainer;
 use justso\justapi\FileSystemInterface;
 use justso\justapi\RequestHelper;
 use justso\justapi\SessionInterface;
@@ -43,6 +44,8 @@ class TestEnvironment extends AbstractSystemEnvironment
 
     private $fileSystem = null;
 
+    private $dic;
+
     /**
      * @var SessionInterface
      */
@@ -57,6 +60,7 @@ class TestEnvironment extends AbstractSystemEnvironment
         $this->request = $request;
         $this->header  = $header;
         $this->session = new TestSession();
+        $this->dic     = new DependencyContainer($this->getFileSystem());
     }
 
     /**
@@ -167,5 +171,17 @@ class TestEnvironment extends AbstractSystemEnvironment
     public function getSession()
     {
         return $this->session;
+    }
+
+    /**
+     * Create new objects of a class or interface with this method.
+     * It uses a mapping table to map the given $name to a implementing class, thus providing a kind of DIC.
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function newInstanceOf($name)
+    {
+        return $this->dic->newInstanceOf($name);
     }
 }
