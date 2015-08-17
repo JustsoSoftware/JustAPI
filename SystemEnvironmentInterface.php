@@ -77,4 +77,13 @@ interface SystemEnvironmentInterface
      * @return Session
      */
     public function getSession();
+
+    /**
+     * Create new objects of a class or interface with this method.
+     * It uses a mapping table to map the given $name to a implementing class, thus providing a kind of DIC.
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function newInstanceOf($name);
 }
