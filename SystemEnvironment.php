@@ -137,7 +137,7 @@ class SystemEnvironment extends AbstractSystemEnvironment
      * It uses a mapping table to map the given $name to a implementing class, thus providing a kind of DIC.
      *
      * @param string $name
-     * @return mixed
+     * @return object
      */
     public function newInstanceOf($name)
     {
