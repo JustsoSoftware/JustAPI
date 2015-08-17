@@ -36,7 +36,7 @@ class RestServiceFactory
     {
         if ($services === null) {
             $config = Bootstrap::getInstance()->getConfiguration();
-            $services = $config['services'];
+            $services = isset($config['services']) ? $config['services'] : array();
         }
         $this->services = $services;
         $this->environment = $environment;
