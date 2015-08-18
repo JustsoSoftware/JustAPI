@@ -50,7 +50,7 @@ class SystemEnvironment extends AbstractSystemEnvironment
             $this->header  = apache_request_headers();
         }
         $this->session = new Session();
-        $this->dic = new DependencyContainer($this->getFileSystem());
+        $this->dic = new DependencyContainer($this);
     }
 
     /**

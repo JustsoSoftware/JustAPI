@@ -60,7 +60,7 @@ class TestEnvironment extends AbstractSystemEnvironment
         $this->request = $request;
         $this->header  = $header;
         $this->session = new TestSession();
-        $this->dic     = new DependencyContainer($this->getFileSystem());
+        $this->dic     = new DependencyContainer($this);
     }
 
     /**
