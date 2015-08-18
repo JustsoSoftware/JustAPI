@@ -45,8 +45,12 @@ class DependencyContainer implements DependencyContainerInterface
     {
         $this->load();
         if (isset($this->config[$name])) {
-            $factory = $this->config[$name];
-            return $factory($this);
+            $entry = $this->config[$name];
+            if (is_callable($entry)) {
+                return $entry($this);
+            } else {
+                $name = $entry;
+            }
         }
         return new $name();
     }
