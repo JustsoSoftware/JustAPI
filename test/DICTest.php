@@ -36,6 +36,6 @@ class DICTest extends \PHPUnit_Framework_TestCase
         $fs->copyFromRealFS(dirname(__DIR__) . '/testutil/TestDICConfig.php', '/test/conf/dependencies.php');
         $env = new DependencyContainer($env);
         $object = $env->newInstanceOf('TestInterface');
-        $this->assertInstanceOf('MockClass', $object);
+        $this->assertInstanceOf('justso\justapi\testutil\MockClass', $object);
     }
 }
