@@ -52,7 +52,7 @@ class DependencyContainer implements DependencyContainerInterface
                 $name = $entry;
             }
         }
-        return new $name();
+        return new $name($this);
     }
 
     /**
