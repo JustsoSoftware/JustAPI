@@ -22,16 +22,16 @@ class DependencyContainer implements DependencyContainerInterface
     private $config = null;
 
     /**
-     * @var FileSystemInterface
+     * @var SystemEnvironmentInterface
      */
-    private $fs;
+    private $env;
 
     /**
-     * @param FileSystemInterface $fs
+     * @param SystemEnvironmentInterface $env
      */
-    public function __construct(FileSystemInterface $fs)
+    public function __construct(SystemEnvironmentInterface $env)
     {
-        $this->fs = $fs;
+        $this->env = $env;
     }
 
     /**
@@ -45,10 +45,14 @@ class DependencyContainer implements DependencyContainerInterface
     {
         $this->load();
         if (isset($this->config[$name])) {
-            $factory = $this->config[$name];
-            return $factory($this);
+            $entry = $this->config[$name];
+            if (is_callable($entry)) {
+                return $entry($this->env);
+            } else {
+                $name = $entry;
+            }
         }
-        return new $name();
+        return new $name($this->env);
     }
 
     /**
@@ -72,8 +76,9 @@ class DependencyContainer implements DependencyContainerInterface
             $this->config = [];
             $localPath = '/conf/dependencies.php';
             $appRoot = Bootstrap::getInstance()->getAppRoot();
-            if ($this->fs->fileExists($appRoot . $localPath)) {
-                $this->config = require_once($this->fs->getRealPath($appRoot . $localPath));
+            $fs = $this->env->getFileSystem();
+            if ($fs->fileExists($appRoot . $localPath)) {
+                $this->config = require_once($fs->getRealPath($appRoot . $localPath));
             }
         }
     }
