@@ -13,8 +13,8 @@ use justso\justapi\Bootstrap;
 use justso\justapi\DependencyContainer;
 use justso\justapi\testutil\FileSystemSandbox;
 
-require (dirname(__DIR__) . '/testutil/MockClass.php');
-require (dirname(__DIR__) . '/testutil/MockClass2.php');
+require_once(dirname(__DIR__) . '/testutil/MockClass.php');
+require_once(dirname(__DIR__) . '/testutil/MockClass2.php');
 
 /**
  * Class DICTest
