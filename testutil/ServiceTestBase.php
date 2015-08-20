@@ -66,7 +66,7 @@ class ServiceTestBase extends \PHPUnit_Framework_TestCase
      */
     public function mockInterface($namespace, $name, TestEnvironment $env)
     {
-        $mock = $this->getMockForAbstractClass($namespace . $name);
+        $mock = $this->getMockForAbstractClass(rtrim($namespace, '\\') . '\\' . $name);
         $env->setDICEntry($name, function () use ($mock) {
             return $mock;
         });
