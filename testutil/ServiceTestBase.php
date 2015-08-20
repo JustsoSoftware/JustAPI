@@ -55,4 +55,21 @@ class ServiceTestBase extends \PHPUnit_Framework_TestCase
         parent::tearDown();
         Bootstrap::getInstance()->resetConfiguration();
     }
+
+    /**
+     * Mocks an entry in the DependencyContainer naming an interface.
+     *
+     * @param string          $namespace
+     * @param string          $name
+     * @param TestEnvironment $env
+     * @return \PHPUnit_FrameWork_MockObject_MockObject
+     */
+    public function mockInterface($namespace, $name, TestEnvironment $env)
+    {
+        $mock = $this->getMockForAbstractClass($namespace . $name);
+        $env->setDICEntry($name, function () use ($mock) {
+            return $mock;
+        });
+        return $mock;
+    }
 }
