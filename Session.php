@@ -18,21 +18,25 @@ class Session implements SessionInterface
 {
     public function getValue($name)
     {
+        $this->activate();
         return $_SESSION[$name];
     }
 
     public function setValue($name, $value)
     {
+        $this->activate();
         $_SESSION[$name] = $value;
     }
 
     public function getId()
     {
+        $this->activate();
         return session_id();
     }
 
     public function isValueSet($name)
     {
+        $this->activate();
         return isset($_SESSION[$name]);
     }
 
