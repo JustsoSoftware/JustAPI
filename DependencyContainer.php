@@ -39,7 +39,7 @@ class DependencyContainer implements DependencyContainerInterface
      * It uses a mapping table to map the given $name to a implementing class, thus providing a kind of DIC.
      *
      * @param string $name
-     * @return mixed
+     * @return object
      */
     public function newInstanceOf($name)
     {
@@ -58,15 +58,15 @@ class DependencyContainer implements DependencyContainerInterface
     }
 
     /**
-     * Sets a new factory for the given name.
+     * Sets a new config entry for the given name.
      *
      * @param string $name
-     * @param callback $factory
+     * @param string|callback|object $entry
      */
-    public function setDICEntry($name, $factory)
+    public function setDICEntry($name, $entry)
     {
         $this->load();
-        $this->config[$name] = $factory;
+        $this->config[$name] = $entry;
     }
 
     /**
