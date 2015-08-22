@@ -48,7 +48,7 @@ class DependencyContainer implements DependencyContainerInterface
             $entry = $this->config[$name];
             if (is_callable($entry)) {
                 return $entry($this->env);
-            } else if (is_object($entry)) {
+            } elseif (is_object($entry)) {
                 return $entry;
             } else {
                 $name = $entry;
