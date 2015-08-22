@@ -195,4 +195,5 @@ class TestEnvironment extends AbstractSystemEnvironment
     {
         $this->dic->setDICEntry($name, $func);
     }
+
 }
