@@ -17,7 +17,7 @@ use justso\justapi\RequestHelper;
  *
  * @package    justso\test
  */
-class ServiceTestBase extends \PHPUnit_Framework_TestCase
+abstract class ServiceTestBase extends \PHPUnit_Framework_TestCase
 {
     /**
      * Asserts that a JSON header is sent.
