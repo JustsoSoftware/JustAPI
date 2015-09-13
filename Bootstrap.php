@@ -42,7 +42,9 @@ class Bootstrap
     {
         $vendorPath = dirname(dirname(__DIR__));
         $this->resetConfiguration();
-        require_once($vendorPath . '/autoload.php');
+        if (file_exists($vendorPath . '/autoload.php')) {
+            require_once($vendorPath . '/autoload.php');
+        }
         $packages = array_merge(array('justso'), self::$config['packages']);
         foreach ($packages as $package) {
             $autoloader = new Autoloader($package, $vendorPath);
