@@ -251,4 +251,15 @@ class RequestHelper
         }
         return $value;
     }
+
+    public function getArrayParam($name, array $default = null, $optional = false)
+    {
+        $value = $this->getParam($name, $default, $optional);
+        if ($value !== null) {
+            if (!is_array($value)) {
+                throw new InvalidParameterException("Parameter '{$name}' is invalid");
+            }
+        }
+        return $value;
+    }
 }
