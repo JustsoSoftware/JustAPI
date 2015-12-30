@@ -112,7 +112,7 @@ class RestServiceFactory
     private function findServiceClassName($services, $serviceName)
     {
         $candidates = array_filter(array_keys($services), function ($service) use ($serviceName) {
-            $service = str_replace(array('/', '*'), array('\\/', '.*'), $service);
+            $service = str_replace(array('/', '*', '-'), array('\\/', '.*', '\\-'), $service);
             return preg_match('/^' . $service . '$/', $serviceName);
         });
         if (count($candidates) > 0) {
