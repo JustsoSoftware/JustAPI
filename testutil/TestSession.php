@@ -30,6 +30,13 @@ class TestSession implements SessionInterface
         $this->session[$name] = $value;
     }
 
+    public function unsetValue($name)
+    {
+        if ($this->isValueSet($name)) {
+            unset($this->session[$name]);
+        }
+    }
+
     public function getId()
     {
         return 'test session';

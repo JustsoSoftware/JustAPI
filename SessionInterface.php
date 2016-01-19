@@ -16,6 +16,7 @@ interface SessionInterface
 {
     public function getValue($name);
     public function setValue($name, $value);
+    public function unsetValue($name);
     public function getId();
     public function isValueSet($name);
     public function activate();

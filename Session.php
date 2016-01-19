@@ -28,6 +28,13 @@ class Session implements SessionInterface
         $_SESSION[$name] = $value;
     }
 
+    public function unsetValue($name)
+    {
+        if ($this->isValueSet($name)) {
+            unset($_SESSION[$name]);
+        }
+    }
+
     public function getId()
     {
         $this->activate();
