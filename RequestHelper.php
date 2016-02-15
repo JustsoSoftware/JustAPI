@@ -154,10 +154,10 @@ class RequestHelper
     {
         $value = $this->getParam($name, $default, $optional);
         if ($value !== null) {
-            if (!preg_match('/^(0|1|true|false)$/', $value)) {
+            if (!is_bool($value) && !preg_match('/^(0|1|true|false)$/', $value)) {
                 throw new InvalidParameterException("Parameter '{$name}' is invalid");
             }
-            $value = $value === '1' || $value === 'true';
+            $value = $value === true || $value === '1' || $value === 'true';
         }
         return $value;
     }
