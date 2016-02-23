@@ -252,6 +252,13 @@ class RequestHelper
         return $value;
     }
 
+    /**
+     * @param string $name
+     * @param array  $default
+     * @param bool   $optional
+     * @return array
+     * @throws InvalidParameterException
+     */
     public function getArrayParam($name, array $default = null, $optional = false)
     {
         $value = $this->getParam($name, $default, $optional);
