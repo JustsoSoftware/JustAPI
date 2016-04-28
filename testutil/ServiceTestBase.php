@@ -26,11 +26,9 @@ abstract class ServiceTestBase extends \PHPUnit_Framework_TestCase
      */
     protected function assertJSONHeader(TestEnvironment $environment)
     {
-        $header = array(
-            'HTTP/1.0 200 Ok',
-            'Content-Type: application/json; charset=utf-8',
-        );
-        $this->assertEquals($header, $environment->getResponseHeader());
+        $header = $this->parseHttpHeaders($environment->getResponseHeader());
+        $this->assertSame('HTTP/1.0 200 Ok', $header[0]);
+        $this->assertSame('application/json; charset=utf-8', $header['Content-Type']);
     }
 
     /**
@@ -71,5 +69,38 @@ abstract class ServiceTestBase extends \PHPUnit_Framework_TestCase
             return $mock;
         });
         return $mock;
+    }
+
+    /**
+     * @param array $raw_headers
+     * @return array
+     */
+    protected function parseHttpHeaders(array $raw_headers)
+    {
+        $headers = [];
+        $key = '';
+
+        foreach ($raw_headers as $row) {
+            $comp = explode(':', $row, 2);
+            if (isset($comp[1])) {
+                $key = $comp[0];
+                $val = trim($comp[1]);
+                if (isset($headers[$key])) {
+                    if (!is_array($headers[$key])) {
+                        $headers[$key] = [$headers[$key]];
+                    }
+                    $headers[$key] = array_merge($headers[$key], [$val]);
+                }
+                $headers[$key] = $val;
+            } else {
+                if (substr($row, 0, 1) === "\t") {
+                    $headers[$key] .= "\r\n\t" . trim($row);
+                } elseif (!$key) {
+                    $headers[0] = trim($row);
+                }
+            }
+        }
+
+        return $headers;
     }
 }
