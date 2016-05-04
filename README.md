@@ -7,7 +7,7 @@ It works as a front controller to call an appropriate service class for the requ
 ## Installation
 
 ### Composer
-  composer require justso/justapi:1.*
+  composer require justso/justapi
 
 ### git
   git clone git://github.com/JustsoSoftware/JustAPI.git vendor/justso/justapi
