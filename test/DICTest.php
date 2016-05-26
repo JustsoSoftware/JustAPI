@@ -45,4 +45,11 @@ class DICTest extends \PHPUnit_Framework_TestCase
         $object = $env->newInstanceOf('TestObject');
         $this->assertInstanceOf('justso\justapi\testutil\MockClass2', $object);
     }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        Bootstrap::getInstance()->resetConfiguration();
+    }
 }
