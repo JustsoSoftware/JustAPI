@@ -3,6 +3,9 @@
 use justso\justapi\testutil\MockClass;
 use justso\justapi\testutil\MockClass2;
 
+/**
+ * @codeCoverageIgnore
+ */
 return [
     'TestClassName' => 'justso\justapi\testutil\MockClass2',
 
