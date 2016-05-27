@@ -40,6 +40,7 @@ class ServiceMock extends RestService
         parent::setName($serviceName);
         self::$lastName = $serviceName;
     }
+    // @codeCoverageIgnoreEnd
 
     public function getAction()
     {
