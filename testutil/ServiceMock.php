@@ -48,23 +48,31 @@ class ServiceMock extends RestService
             throw new self::$exception;
         }
         parent::getAction();
+        // @codeCoverageIgnoreStart
     }
+    // @codeCoverageIgnoreEnd
 
     public function postAction()
     {
         self::$called[__FUNCTION__]++;
         parent::postAction();
+        // @codeCoverageIgnoreStart
     }
+    // @codeCoverageIgnoreEnd
 
     public function putAction()
     {
         self::$called[__FUNCTION__]++;
         parent::putAction();
+        // @codeCoverageIgnoreStart
     }
+    // @codeCoverageIgnoreEnd
 
     public function deleteAction()
     {
         self::$called[__FUNCTION__]++;
         parent::deleteAction();
+        // @codeCoverageIgnoreStart
     }
+    // @codeCoverageIgnoreEnd
 }
