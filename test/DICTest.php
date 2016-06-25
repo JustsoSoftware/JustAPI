@@ -7,7 +7,7 @@
  * @package    justso\justapi\test
  */
 
-namespace justso\justapi\test;
+namespace justso\justapi;
 
 use justso\justapi\Bootstrap;
 use justso\justapi\DependencyContainer;
@@ -25,12 +25,19 @@ require_once(dirname(__DIR__) . '/testutil/MockClass2.php');
  */
 class DICTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Bootstrap
+     */
+    private $bootstrap;
+
     public function testInstantiation()
     {
-        $config = array('environments' => array('test' => array('approot' => '/test')));
-        Bootstrap::getInstance()->setTestConfiguration('/test', $config);
         $request = new RequestHelper();
         $env = new TestEnvironment($request);
+        $config = array('environments' => array('test' => array('approot' => '/test')));
+        $this->bootstrap = $env->getBootstrap();
+        $this->bootstrap->setTestConfiguration('/test', $config);
+
         /** @var FileSystemSandbox $fs */
         $fs = $env->getFileSystem();
         $fs->copyFromRealFS(dirname(__DIR__) . '/testutil/TestDICConfig.php', '/test/conf/dependencies.php');
@@ -50,6 +57,6 @@ class DICTest extends \PHPUnit_Framework_TestCase
     {
         parent::tearDown();
 
-        Bootstrap::getInstance()->resetConfiguration();
+        $this->bootstrap->resetConfiguration();
     }
 }

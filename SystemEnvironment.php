@@ -35,12 +35,6 @@ class SystemEnvironment extends AbstractSystemEnvironment
     private $session;
 
     /**
-     * Dependency Injection Container
-     * @var DependencyContainer
-     */
-    private $dic = null;
-
-    /**
      * Initializes the SystemEnvironment
      */
     public function __construct()
@@ -130,17 +124,5 @@ class SystemEnvironment extends AbstractSystemEnvironment
     public function getSession()
     {
         return $this->session;
-    }
-
-    /**
-     * Create new objects of a class or interface with this method.
-     * It uses a mapping table to map the given $name to a implementing class, thus providing a kind of DIC.
-     *
-     * @param string $name
-     * @return object
-     */
-    public function newInstanceOf($name)
-    {
-        return $this->dic->newInstanceOf($name);
     }
 }

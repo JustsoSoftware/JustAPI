@@ -8,10 +8,8 @@
  * @package    justso\test
  */
 
-namespace justso\justapi\test;
+namespace justso\justapi;
 
-use justso\justapi\RequestHelper;
-use justso\justapi\RestServiceFactory;
 use justso\justapi\testutil\ServiceMock;
 use justso\justapi\testutil\TestEnvironment;
 

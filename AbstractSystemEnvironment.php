@@ -17,6 +17,12 @@ namespace justso\justapi;
 abstract class AbstractSystemEnvironment implements SystemEnvironmentInterface, DependencyContainerInterface
 {
     /**
+     * Dependency Injection Container
+     * @var DependencyContainerInterface
+     */
+    protected $dic = null;
+
+    /**
      * Sends a standard HTTP response.
      *
      * @param string $code    Code and Code-text
@@ -38,5 +44,36 @@ abstract class AbstractSystemEnvironment implements SystemEnvironmentInterface, 
     public function sendJSONResult($data)
     {
         $this->sendResult('200 Ok', 'application/json; charset=utf-8', json_encode($data));
+    }
+
+    /**
+     * Create new objects of a class or interface with this method.
+     * It uses a mapping table to map the given $name to a implementing class, thus providing a kind of DIC.
+     *
+     * @param string $name
+     * @return object
+     * @deprecated Use ->getDIC()->newInstanceOf() instead
+     */
+    public function newInstanceOf($name)
+    {
+        return $this->dic->newInstanceOf($name);
+    }
+
+    /**
+     * Returns the dependency injection container
+     *
+     * @return DependencyContainerInterface
+     */
+    public function getDIC()
+    {
+        return $this->dic;
+    }
+
+    /**
+     * @return Bootstrap
+     */
+    public function getBootstrap()
+    {
+        return Bootstrap::getInstance();
     }
 }

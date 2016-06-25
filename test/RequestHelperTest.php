@@ -7,9 +7,7 @@
  * @package    justso\justapi\test
  */
 
-namespace justso\justapi\test;
-
-use justso\justapi\RequestHelper;
+namespace justso\justapi;
 
 /**
  * Class RequestHelperTest

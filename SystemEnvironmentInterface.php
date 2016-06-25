@@ -84,6 +84,19 @@ interface SystemEnvironmentInterface
      *
      * @param string $name
      * @return object
+     * @deprecated Use ->getDIC()->newInstanceOf() instead
      */
     public function newInstanceOf($name);
+
+    /**
+     * Returns the dependency injection container
+     *
+     * @return DependencyContainerInterface
+     */
+    public function getDIC();
+
+    /**
+     * @return Bootstrap
+     */
+    public function getBootstrap();
 }
