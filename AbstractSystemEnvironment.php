@@ -28,7 +28,7 @@ abstract class AbstractSystemEnvironment implements SystemEnvironmentInterface, 
 
     protected $bootstrap;
 
-    function __construct()
+    public function __construct()
     {
         $this->bootstrap = Bootstrap::getInstance();
 
