@@ -10,12 +10,11 @@
 namespace justso\justapi\testutil;
 
 use justso\justapi\AbstractSystemEnvironment;
-use justso\justapi\Bootstrap;
-use justso\justapi\DependencyContainer;
-use justso\justapi\DependencyContainerInterface;
 use justso\justapi\FileSystemInterface;
 use justso\justapi\RequestHelper;
 use justso\justapi\SessionInterface;
+
+require_once(dirname(__DIR__) . "/AbstractSystemEnvironment.php");
 
 /**
  * Handles the outer world interface for tests
@@ -55,12 +54,12 @@ class TestEnvironment extends AbstractSystemEnvironment
      * @param RequestHelper $request
      * @param string[] $header
      */
-    public function __construct(RequestHelper $request, array $header = array())
+    public function __construct(RequestHelper $request = null, array $header = array())
     {
         $this->request = $request;
         $this->header  = $header;
+        parent::__construct();
         $this->session = new TestSession();
-        $this->dic     = new DependencyContainer($this);
     }
 
     /**

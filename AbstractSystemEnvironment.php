@@ -9,6 +9,10 @@
 
 namespace justso\justapi;
 
+require_once(__DIR__ . "/SystemEnvironmentInterface.php");
+require_once(__DIR__ . "/DependencyContainerInterface.php");
+require_once(__DIR__ . "/Bootstrap.php");
+
 /**
  * Implements methods which are common for SystemEnvironment and TestEnvironment
  *
@@ -20,7 +24,27 @@ abstract class AbstractSystemEnvironment implements SystemEnvironmentInterface, 
      * Dependency Injection Container
      * @var DependencyContainerInterface
      */
-    protected $dic = null;
+    protected $dic;
+
+    protected $bootstrap;
+
+    function __construct()
+    {
+        $this->bootstrap = Bootstrap::getInstance();
+
+        $vendorPath = dirname(dirname(__DIR__));
+        if (file_exists($vendorPath . '/autoload.php')) {
+            require_once($vendorPath . '/autoload.php');
+        }
+        $config = $this->bootstrap->getConfiguration();
+        $packages = array_merge(array('justso'), !empty($config['packages']) ? $config['packages'] : []);
+        foreach ($packages as $package) {
+            $autoloader = new Autoloader($package, $vendorPath);
+            $autoloader->register();
+        }
+
+        $this->dic = new DependencyContainer($this);
+    }
 
     /**
      * Sends a standard HTTP response.
@@ -74,6 +98,6 @@ abstract class AbstractSystemEnvironment implements SystemEnvironmentInterface, 
      */
     public function getBootstrap()
     {
-        return Bootstrap::getInstance();
+        return $this->bootstrap;
     }
 }

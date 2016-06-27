@@ -9,6 +9,8 @@
 
 namespace justso\justapi;
 
+require_once(__DIR__ . "/AbstractSystemEnvironment.php");
+
 /**
  * Handles the outer world interface to the browser
  *
@@ -39,12 +41,12 @@ class SystemEnvironment extends AbstractSystemEnvironment
      */
     public function __construct()
     {
+        parent::__construct();
         $this->request = new RequestHelper();
         if (function_exists('apache_request_headers')) {
             $this->header  = apache_request_headers();
         }
         $this->session = new Session();
-        $this->dic = new DependencyContainer($this);
     }
 
     /**

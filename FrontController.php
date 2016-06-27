@@ -10,9 +10,8 @@
 namespace justso\justapi;
 
 // @codeCoverageIgnoreStart
-require_once('Bootstrap.php');
+require_once('SystemEnvironment.php');
 
-Bootstrap::getInstance();
 $env = new SystemEnvironment();
 $factory = new RestServiceFactory($env);
 $factory->handleRequest();

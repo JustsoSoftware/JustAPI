@@ -7,7 +7,7 @@
  */
 
 // @codeCoverageIgnoreStart
-require_once(dirname(__DIR__) . '/Bootstrap.php');
+require_once(dirname(__DIR__) . '/testutil/TestEnvironment.php');
 
-justso\justapi\Bootstrap::getInstance();
+new \justso\justapi\testutil\TestEnvironment();
 // @codeCoverageIgnoreEnd
