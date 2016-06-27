@@ -9,9 +9,6 @@
 
 namespace justso\justapi;
 
-use justso\justapi\Bootstrap;
-use justso\justapi\DependencyContainer;
-use justso\justapi\RequestHelper;
 use justso\justapi\testutil\FileSystemSandbox;
 use justso\justapi\testutil\TestEnvironment;
 
