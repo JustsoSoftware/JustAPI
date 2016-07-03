@@ -35,7 +35,7 @@ class RestServiceFactory
     public function __construct(SystemEnvironmentInterface $environment, $services = null)
     {
         if ($services === null) {
-            $config = Bootstrap::getInstance()->getConfiguration();
+            $config = $environment->getBootstrap()->getConfiguration();
             $services = isset($config['services']) ? $config['services'] : array();
         }
         $this->services = $services;
@@ -119,7 +119,7 @@ class RestServiceFactory
             $prefix = preg_replace('/\*$/', '', current($candidates));
             $info = $services[current($candidates)];
             if (strpos($info, 'file:') === 0) {
-                $appFile = Bootstrap::getInstance()->getAppRoot() . '/' . str_replace('file:', '', $info);
+                $appFile = $this->environment->getBootstrap()->getAppRoot() . '/' . str_replace('file:', '', $info);
                 $config = json_decode(file_get_contents($appFile), true);
                 return $this->findServiceClassName($config['services'], str_replace($prefix, '', $serviceName));
             } else {
@@ -131,13 +131,12 @@ class RestServiceFactory
 
     private function handleAllowedOrigins()
     {
-        $allowedOrigins = Bootstrap::getInstance()->getAllowedOrigins();
+        $env = $this->environment;
+        $allowedOrigins = $env->getBootstrap()->getAllowedOrigins();
         if ($allowedOrigins !== '') {
-            $this->environment->sendHeader('Access-Control-Allow-Origin: ' . $allowedOrigins);
-            $this->environment->sendHeader('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
-            $this->environment->sendHeader(
-                'Access-Control-Allow-Headers: Token, Content-Type, Origin, Accept, x-requested-with'
-            );
+            $env->sendHeader('Access-Control-Allow-Origin: ' . $allowedOrigins);
+            $env->sendHeader('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
+            $env->sendHeader('Access-Control-Allow-Headers: Token, Content-Type, Origin, Accept, x-requested-with');
         }
     }
 

@@ -19,6 +19,9 @@ use justso\justapi\RequestHelper;
  */
 abstract class ServiceTestBase extends \PHPUnit_Framework_TestCase
 {
+    /** @var TestEnvironment */
+    protected $env;
+
     /**
      * Asserts that a JSON header is sent.
      *
@@ -42,7 +45,8 @@ abstract class ServiceTestBase extends \PHPUnit_Framework_TestCase
     {
         $request = new RequestHelper();
         $request->fillWithData($params, array('HTTP_HOST' => 'localhost'));
-        return new TestEnvironment($request, $header);
+        $this->env = new TestEnvironment($request, $header);
+        return $this->env;
     }
 
     /**
@@ -51,7 +55,9 @@ abstract class ServiceTestBase extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         parent::tearDown();
-        Bootstrap::getInstance()->resetConfiguration();
+        if ($this->env) {
+            $this->env->getBootstrap()->resetConfiguration();
+        }
     }
 
     /**

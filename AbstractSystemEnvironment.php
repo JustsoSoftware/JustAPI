@@ -30,7 +30,7 @@ abstract class AbstractSystemEnvironment implements SystemEnvironmentInterface, 
 
     public function __construct()
     {
-        $this->bootstrap = Bootstrap::getInstance();
+        $this->bootstrap = new Bootstrap();
 
         $vendorPath = dirname(dirname(__DIR__));
         if (file_exists($vendorPath . '/autoload.php')) {

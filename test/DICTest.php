@@ -32,8 +32,7 @@ class DICTest extends \PHPUnit_Framework_TestCase
         $request = new RequestHelper();
         $env = new TestEnvironment($request);
         $config = array('environments' => array('test' => array('approot' => '/test')));
-        $this->bootstrap = $env->getBootstrap();
-        $this->bootstrap->setTestConfiguration('/test', $config);
+        $env->getBootstrap()->setTestConfiguration('/test', $config);
 
         /** @var FileSystemSandbox $fs */
         $fs = $env->getFileSystem();
@@ -48,12 +47,5 @@ class DICTest extends \PHPUnit_Framework_TestCase
 
         $object = $env->newInstanceOf('TestObject');
         $this->assertInstanceOf('justso\justapi\testutil\MockClass2', $object);
-    }
-
-    protected function tearDown()
-    {
-        parent::tearDown();
-
-        $this->bootstrap->resetConfiguration();
     }
 }

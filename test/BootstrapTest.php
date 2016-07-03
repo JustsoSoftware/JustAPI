@@ -16,15 +16,9 @@ namespace justso\justapi;
  */
 class BootstrapTest extends \PHPUnit_Framework_TestCase
 {
-    protected function tearDown()
-    {
-        parent::tearDown();
-        Bootstrap::getInstance()->resetConfiguration();
-    }
-
     public function testGetInstance()
     {
-        $bootstrap = Bootstrap::getInstance();
+        $bootstrap = new Bootstrap();
         $this->assertSame('justso\justapi\Bootstrap', get_class($bootstrap));
     }
 
@@ -35,46 +29,39 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
             'environments' => array('test' => array('approot' => '/my/approot'))
         );
 
-        $bootstrap = Bootstrap::getInstance();
-        $bootstrap->setTestConfiguration('/my/approot', $config);
+        $bootstrap = new Bootstrap('/my/approot', $config);
         $this->assertSame($config, $bootstrap->getConfiguration());
     }
 
     public function testGetDomain()
     {
-        $bootstrap = $this->getBootstrap();
-        $config = $bootstrap->getConfiguration();
+        $config = $this->getBootstrap()->getConfiguration();
         $this->assertSame('justso.de', $config['domain']);
     }
 
     public function testGetAppRoot()
     {
-        $bootstrap = $this->getBootstrap();
-        $this->assertSame('/var/lib/jenkins/jobs/justapi/workspace', $bootstrap->getAppRoot());
+        $this->assertSame('/var/lib/jenkins/jobs/justapi/workspace', $this->getBootstrap()->getAppRoot());
     }
 
     public function testGetWebAppUrl()
     {
-        $bootstrap = $this->getBootstrap();
-        $this->assertSame('http://localhost/justapi', $bootstrap->getWebAppUrl());
+        $this->assertSame('http://localhost/justapi', $this->getBootstrap()->getWebAppUrl());
     }
 
     public function testGetApiUrl()
     {
-        $bootstrap = $this->getBootstrap();
-        $this->assertSame('http://localhost/justapi/api', $bootstrap->getApiUrl());
+        $this->assertSame('http://localhost/justapi/api', $this->getBootstrap()->getApiUrl());
     }
 
     public function testGetInstallationType()
     {
-        $bootstrap = $this->getBootstrap();
-        $this->assertSame('autotest', $bootstrap->getInstallationType());
+        $this->assertSame('autotest', $this->getBootstrap()->getInstallationType());
     }
 
     public function testGetAllowedOrigins()
     {
-        $bootstrap = $this->getBootstrap();
-        $this->assertSame('', $bootstrap->getAllowedOrigins());
+        $this->assertSame('', $this->getBootstrap()->getAllowedOrigins());
     }
 
     /**
@@ -85,7 +72,6 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     public function provideInvalidConfigurations()
     {
         return array(
-            array(array()),
             array(array('environments' => array())),
             array(array('environments' => array('test' => array()))),
             array(array('environments' => array('test' => array('approot' => '/unknown/path')))),
@@ -100,8 +86,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetTestConfigurationWithIncompleteConfiguration($config)
     {
-        $bootstrap = Bootstrap::getInstance();
-        $bootstrap->setTestConfiguration('/var/www', $config);
+        new Bootstrap('/var/www', $config);
         // @codeCoverageIgnoreStart
     }
     // @codeCoverageIgnoreEnd
@@ -112,7 +97,6 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
      */
     private function getBootstrap($environment = 'autotest')
     {
-        $bootstrap = Bootstrap::getInstance();
         $config = array(
             'domain' => 'justso.de',
             'languages' => array('de'),
@@ -140,7 +124,6 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
         );
-        $bootstrap->setTestConfiguration($config['environments'][$environment]['approot'], $config);
-        return $bootstrap;
+        return new Bootstrap($config['environments'][$environment]['approot'], $config);
     }
 }

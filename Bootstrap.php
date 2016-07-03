@@ -14,47 +14,45 @@ require_once("Autoloader.php");
 require_once("InvalidParameterException.php");
 
 /**
- * Singleton class which sets up autoloading
+ * Handles global configuration
  *
  * @package    justso
  */
 class Bootstrap
 {
-    /**
-     * @var Bootstrap
-     */
-    private static $instance = null;
+    private $appRoot;
 
-    private static $appRoot;
+    private $config;
 
-    private static $config;
+    private $environment;
 
-    private static $environment;
-
-    private static $info;
+    private $info;
 
     /**
-     * Initializes the system.
-     * The file 'config.json' in the application folder is read and autoloading of the specified packages is configured.
-     * @codeCoverageIgnore
+     * Initializes the Bootstrap configuration.
      */
-    private function __construct()
+    public function __construct($appRoot = null, array $config = null)
     {
-        $this->resetConfiguration();
+        $this->appRoot = $appRoot ?: dirname(dirname(dirname(__DIR__)));
+        $this->config = $config ?: json_decode(file_get_contents($this->appRoot . '/config.json'), true);
+        $this->setEnvironmentInfo();
     }
 
     /**
-     * Sets the configuration for testing purposes - don't use for other things.
-     * Autoloading is initialized only on boot and will not be changed afterwards.
+     * Sets the configuration in an existing Bootstrap config for testing purposes - don't use for other things.
      *
      * @param string $appRoot Simulated application root folder
-     * @param mixed  $config  New test configuration
+     * @param array  $config  New test configuration
      */
-    public function setTestConfiguration($appRoot, $config)
+    public function setTestConfiguration($appRoot = null, array $config = null)
     {
-        self::$appRoot = $appRoot;
-        self::$config = $config;
-        $this->setEnvironment();
+        if ($appRoot !== null) {
+            $this->appRoot = $appRoot;
+        }
+        if ($config !== null) {
+            $this->config = $config;
+        }
+        $this->setEnvironmentInfo();
     }
 
     /**
@@ -62,24 +60,20 @@ class Bootstrap
      */
     public function resetConfiguration()
     {
-        self::$appRoot = dirname(dirname(dirname(__DIR__)));
-        self::$config = json_decode(file_get_contents(self::$appRoot . '/config.json'), true);
-        $this->setEnvironment();
+        $this->appRoot = dirname(dirname(dirname(__DIR__)));
+        $this->config = json_decode(file_get_contents($this->appRoot . '/config.json'), true);
+        $this->setEnvironmentInfo();
     }
 
     /**
      * Returns the Bootstrap instance.
      *
      * @return Bootstrap
+     * @deprecated Use new Bootstrap() instead.
      */
     public static function getInstance()
     {
-        if (self::$instance === null) {
-            // @codeCoverageIgnoreStart
-            self::$instance = new self();
-        }
-        // @codeCoverageIgnoreEnd
-        return self::$instance;
+        return new self();
     }
 
     /**
@@ -89,7 +83,7 @@ class Bootstrap
      */
     public function getInstallationType()
     {
-        return self::$environment;
+        return $this->environment;
     }
 
     /**
@@ -99,7 +93,7 @@ class Bootstrap
      */
     public function getAllowedOrigins()
     {
-        return empty(self::$info['origins']) ? '' : self::$info['origins'];
+        return empty($this->info['origins']) ? '' : $this->info['origins'];
     }
 
     /**
@@ -107,7 +101,7 @@ class Bootstrap
      */
     public function getApiUrl()
     {
-        return empty(self::$info['apiurl']) ? $this->getWebAppUrl() . '/api' : self::$info['apiurl'];
+        return empty($this->info['apiurl']) ? $this->getWebAppUrl() . '/api' : $this->info['apiurl'];
     }
 
     /**
@@ -115,7 +109,7 @@ class Bootstrap
      */
     public function getWebAppUrl()
     {
-        return empty(self::$info['appurl']) ? 'http://localhost' : self::$info['appurl'];
+        return empty($this->info['appurl']) ? 'http://localhost' : $this->info['appurl'];
     }
 
     /**
@@ -125,7 +119,7 @@ class Bootstrap
      */
     public function getAppRoot()
     {
-        return self::$appRoot;
+        return $this->appRoot;
     }
 
     /**
@@ -135,7 +129,7 @@ class Bootstrap
      */
     public function getConfiguration()
     {
-        return self::$config;
+        return $this->config;
     }
 
     /**
@@ -143,33 +137,28 @@ class Bootstrap
      */
     public function setConfiguration($config)
     {
-        self::$config = $config;
+        $this->config = $config;
         $encoded = json_encode($config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        file_put_contents(self::$appRoot . '/config.json', $encoded);
+        file_put_contents($this->appRoot . '/config.json', $encoded);
     }
 
-    /**
-     * Updates the current installation environment on base of configuration parameters.
-     *
-     * @throws InvalidParameterException if configuration is not sufficient
-     */
-    private function setEnvironment()
+    private function setEnvironmentInfo()
     {
-        if (empty(self::$config['environments'])) {
+        if (empty($this->config['environments'])) {
             throw new InvalidParameterException('config.json should contain information about environments');
         }
-        foreach (self::$config['environments'] as $environment => $info) {
+        foreach ($this->config['environments'] as $environment => $info) {
             if (empty($info['approot'])) {
                 throw new InvalidParameterException(
                     "config.json environment '$environment' should contain at least 'approot'"
                 );
             }
-            if ($info['approot'] === self::$appRoot) {
-                self::$environment = $environment;
-                self::$info = $info;
+            if ($info['approot'] === $this->appRoot) {
+                $this->environment = $environment;
+                $this->info = $info;
                 return;
             }
         }
-        throw new InvalidParameterException("Environment for cwd='" . self::$appRoot . "' not found");
+        throw new InvalidParameterException("Environment for cwd='" . $this->appRoot . "' not found");
     }
 }
