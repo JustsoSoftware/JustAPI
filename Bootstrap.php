@@ -28,6 +28,8 @@ class Bootstrap
 
     private $info;
 
+    private static $instance;
+
     /**
      * Initializes the Bootstrap configuration.
      */
@@ -36,6 +38,7 @@ class Bootstrap
         $this->appRoot = $appRoot ?: dirname(dirname(dirname(__DIR__)));
         $this->config = $config ?: json_decode(file_get_contents($this->appRoot . '/config.json'), true);
         $this->setEnvironmentInfo();
+        self::$instance = $this;
     }
 
     /**
@@ -73,7 +76,7 @@ class Bootstrap
      */
     public static function getInstance()
     {
-        return new self();
+        return self::$instance;
     }
 
     /**
