@@ -46,6 +46,9 @@ abstract class ServiceTestBase extends \PHPUnit_Framework_TestCase
         $request = new RequestHelper();
         $request->fillWithData($params, array('HTTP_HOST' => 'localhost'));
         $this->env = new TestEnvironment($request, $header);
+        /** @var FileSystemSandbox $fs */
+        $fs = $this->env->getFileSystem();
+        $fs->copyFromRealFS($this->env->getBootstrap()->getAppRoot() . '/conf/dependencies.php');
         return $this->env;
     }
 
