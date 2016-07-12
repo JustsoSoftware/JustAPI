@@ -135,4 +135,29 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(in_array('Content-Type: text/plain; charset=utf-8', $header));
         $this->assertTrue(in_array('HTTP/1.0 500 Server error', $header));
     }
+
+    public function testServerUsesRequestUri()
+    {
+        ServiceMock::reset();
+        $request = new RequestHelper();
+        $request->set(array(), array('REQUEST_URI' => '/test', 'REQUEST_METHOD' => 'GET'));
+        $environment = new TestEnvironment($request);
+        $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\testutil\ServiceMock'));
+        $factory->handleRequest();
+        $this->assertSame('GET method not implemented for this URL', $environment->getResponseContent());
+        $this->assertSame(1, ServiceMock::$called['getAction']);
+    }
+
+    public function testMissingRequestMethod()
+    {
+        $request = new RequestHelper();
+        $request->set(array(), array('REQUEST_URI' => '/test'));
+        $environment = new TestEnvironment($request);
+        $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\testutil\ServiceMock'));
+        $factory->handleRequest();
+        $header = $environment->getResponseHeader();
+        $this->assertTrue(in_array('Content-Type: text/plain; charset=utf-8', $header));
+        $this->assertTrue(in_array('HTTP/1.0 400 Bad Request', $header));
+        $this->assertSame('Missing request method', $environment->getResponseContent());
+    }
 }

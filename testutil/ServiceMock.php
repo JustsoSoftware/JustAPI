@@ -34,6 +34,20 @@ class ServiceMock extends RestService
      */
     public static $exception = null;
 
+    public static function reset()
+    {
+        self::$called = array(
+            'setName'      => 0,
+            'getAction'    => 0,
+            'postAction'   => 0,
+            'putAction'    => 0,
+            'deleteAction' => 0,
+        );
+
+        self::$lastName = '';
+        self::$exception = null;
+    }
+
     public function setName($serviceName)
     {
         self::$called[__FUNCTION__]++;
