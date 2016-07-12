@@ -81,7 +81,7 @@ class RestServiceFactory
         $body = file_get_contents("php://input");
         $content_type = isset($server['CONTENT_TYPE']) ? $server['CONTENT_TYPE'] : '';
         if (strchr($content_type, ';') !== false) {
-            list($content_type) = preg_split('/;/', $content_type, 1);
+            list($content_type) = preg_split('/;/', $content_type, 2);
         }
         switch ($content_type) {
             case "application/json":
