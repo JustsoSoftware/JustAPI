@@ -205,7 +205,9 @@ class RestServiceFactory
         $params = [];
         $boundary = substr($body, 0, strpos($body, "\r\n"));
         foreach (array_slice(explode($boundary, $body), 1) as $part) {
-            if ($part == "--\r\n") break;
+            if ($part == "--\r\n") {
+                break;
+            }
             $part = ltrim($part, "\r\n");
             list($rawHeaders, $content) = explode("\r\n\r\n", $part, 2);
             $content = substr($content, 0, strlen($content) - 2);
