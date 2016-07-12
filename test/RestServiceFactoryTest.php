@@ -160,4 +160,29 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(in_array('HTTP/1.0 400 Bad Request', $header));
         $this->assertSame('Missing request method', $environment->getResponseContent());
     }
+
+    public function provideContentType()
+    {
+        return [
+            ['application/json'],
+            ['application/x-www-form-urlencoded'],
+            ['multipart/form-data']
+        ];
+    }
+
+    /**
+     * @param $type
+     * @dataProvider provideContentType
+     */
+    public function testContentType($type)
+    {
+        ServiceMock::reset();
+        $request = new RequestHelper();
+        $request->set(array(), array('REQUEST_URI' => '/test', 'REQUEST_METHOD' => 'GET'));
+        $environment = new TestEnvironment($request);
+        $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\testutil\ServiceMock'));
+        $factory->handleRequest();
+        $this->assertSame('GET method not implemented for this URL', $environment->getResponseContent());
+        $this->assertSame(1, ServiceMock::$called['getAction']);
+    }
 }
