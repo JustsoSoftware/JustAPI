@@ -81,21 +81,21 @@ class RestServiceFactory
         $body = file_get_contents("php://input");
         $content_type = isset($server['CONTENT_TYPE']) ? $server['CONTENT_TYPE'] : '';
         if (strchr($content_type, ';') !== false) {
-            list($content_type) = preg_split('/;/', $content_type);
+            list($content_type) = preg_split('/;/', $content_type, 1);
         }
         switch ($content_type) {
             case "application/json":
-                $body_params = json_decode($body, true);
-                if ($body_params) {
-                    $params = array_merge($params, $body_params);
-                }
+                $params = array_merge($params, $this->parseApplicationJson($body));
                 break;
 
             case "application/x-www-form-urlencoded":
-                $postvars = array();
-                parse_str($body, $postvars);
-                $params = array_merge($params, $postvars);
+                $params = array_merge($params, $this->parseApplicationFormUrlEncoded($body));
                 break;
+
+            case "multipart/form-data":
+                $params = array_merge($params, $this->parseMultipartFormdata($body));
+                break;
+
         }
         $environment->getRequestHelper()->fillWithData($params);
     }
@@ -187,5 +187,51 @@ class RestServiceFactory
             throw new InvalidParameterException("Missing information about service URI");
         }
         return $uri;
+    }
+
+    private function parseApplicationFormUrlEncoded($body)
+    {
+        parse_str($body, $postvars = []);
+        return $postvars;
+    }
+
+    private function parseApplicationJson($body)
+    {
+        return json_decode($body, true);
+    }
+
+    private function parseMultipartFormdata($body)
+    {
+        $params = [];
+        $boundary = substr($body, 0, strpos($body, "\r\n"));
+        foreach (array_slice(explode($boundary, $body), 1) as $part) {
+            if ($part == "--\r\n") break;
+            $part = ltrim($part, "\r\n");
+            list($rawHeaders, $content) = explode("\r\n\r\n", $part, 2);
+            $content = substr($content, 0, strlen($content) - 2);
+            $headers = [];
+            foreach (explode("\r\n", $rawHeaders) as $header) {
+                list($name, $value) = explode(':', $header);
+                $headers[strtolower($name)] = ltrim($value, ' ');
+            }
+            if (isset($headers['content-disposition'])) {
+                preg_match(
+                    '/^(.+); *name="([^"]+)"(; *filename="([^"]+)")?/',
+                    $headers['content-disposition'],
+                    $matches
+                );
+
+                if (isset($matches[4])) {
+                    $params[$matches[2]] = [
+                        'name' => $matches[4],
+                        'content' => $content,
+                        'type' => $headers['content-type']
+                    ];
+                } else {
+                    $params[$matches[2]] = $content;
+                }
+            }
+        }
+        return $params;
     }
 }
