@@ -218,19 +218,25 @@ class RestServiceFactory
             }
             if (isset($headers['content-disposition'])) {
                 preg_match(
-                    '/^(.+); *name="([^"]+)"(; *filename="([^"]+)")?/',
+                    '/^(.+); *name="([\w_]+(\[\])?)"(; *filename="([^"]+)")?/',
                     $headers['content-disposition'],
                     $matches
                 );
 
-                if (isset($matches[4])) {
-                    $params[$matches[2]] = [
-                        'name' => $matches[4],
+                $param = $matches[2];
+                if (isset($matches[5])) {
+                    $params[$param] = [
+                        'name' => $matches[5],
                         'content' => $content,
                         'type' => $headers['content-type']
                     ];
+                } else if (isset($matches[3]) && $matches[3] === '[]') {
+                    if (!isset($params[$param])) {
+                        $params[$param] = [];
+                    }
+                    $params[$param][] = $content;
                 } else {
-                    $params[$matches[2]] = $content;
+                    $params[$param] = $content;
                 }
             }
         }
