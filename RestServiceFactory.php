@@ -230,7 +230,7 @@ class RestServiceFactory
                         'content' => $content,
                         'type' => $headers['content-type']
                     ];
-                } else if (isset($matches[3]) && $matches[3] === '[]') {
+                } elseif (isset($matches[3]) && $matches[3] === '[]') {
                     if (!isset($params[$param])) {
                         $params[$param] = [];
                     }
