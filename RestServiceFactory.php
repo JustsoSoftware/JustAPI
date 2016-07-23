@@ -95,7 +95,6 @@ class RestServiceFactory
             case "multipart/form-data":
                 $params = array_merge($params, $this->parseMultipartFormdata($body));
                 break;
-
         }
         $environment->getRequestHelper()->fillWithData($params);
     }
