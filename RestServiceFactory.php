@@ -190,7 +190,8 @@ class RestServiceFactory
 
     private function parseApplicationFormUrlEncoded($body)
     {
-        parse_str($body, $postvars = []);
+        $postvars = [];
+        parse_str($body, $postvars);
         return $postvars;
     }
 
