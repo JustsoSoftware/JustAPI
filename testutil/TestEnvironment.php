@@ -182,4 +182,14 @@ class TestEnvironment extends AbstractSystemEnvironment
     {
         $this->dic->setDICEntry($name, $func);
     }
+
+    /**
+     * @param string $localPath
+     */
+    public function copyFromRealFS($localPath)
+    {
+        /** @var FileSystemSandbox $fs */
+        $fs = $this->getFileSystem();
+        $fs->copyFromRealFS($this->getBootstrap()->getAppRoot() . $localPath);
+    }
 }
