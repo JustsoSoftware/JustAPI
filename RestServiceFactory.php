@@ -148,7 +148,7 @@ class RestServiceFactory
     private function callService($className, $serviceName, $method)
     {
         /** @var $service RestService */
-        $service = new $className($this->environment, $serviceName);
+        $service = $this->environment->getDIC()->get($className, [$this->environment, $serviceName]);
         $service->setName($serviceName);
         $this->extractParameters($this->environment);
         $verb = $method . 'Action';

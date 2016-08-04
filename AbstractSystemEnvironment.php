@@ -76,11 +76,16 @@ abstract class AbstractSystemEnvironment implements SystemEnvironmentInterface, 
      *
      * @param string $name
      * @return object
-     * @deprecated Use ->getDIC()->newInstanceOf() instead
+     * @deprecated Use ->getDIC()->get() instead
      */
     public function newInstanceOf($name)
     {
         return $this->dic->newInstanceOf($name);
+    }
+
+    public function get($name, array $arguments = null)
+    {
+        return $this->dic->get($name, $arguments);
     }
 
     /**

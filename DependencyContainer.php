@@ -40,21 +40,38 @@ class DependencyContainer implements DependencyContainerInterface
      *
      * @param string $name
      * @return object
+     * @deprecated use get() instead.
      */
     public function newInstanceOf($name)
     {
+        return $this->get($name);
+    }
+
+    /**
+     * Create new objects of a class or interface with this method.
+     * It uses a mapping table to map the given $name to a implementing class, thus providing a kind of DIC.
+     *
+     * @param string $name
+     * @param array $arguments for constructor
+     * @return object
+     */
+    public function get($name, array $arguments = null)
+    {
         $this->load();
+        if ($arguments === null) {
+            $arguments = [$this->env];
+        }
         if (isset($this->config[$name])) {
             $entry = $this->config[$name];
             if (is_callable($entry)) {
-                return $entry($this->env);
+                return $entry(...$arguments);
             } elseif (is_object($entry)) {
                 return $entry;
             } else {
                 $name = $entry;
             }
         }
-        return new $name($this->env);
+        return new $name(...$arguments);
     }
 
     /**
