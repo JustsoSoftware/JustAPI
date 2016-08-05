@@ -44,48 +44,4 @@ abstract class RestService implements ServiceInterface
     {
         $this->name = $serviceName;
     }
-
-    /**
-     * Executes the requested get action.
-     *
-     * @throws \Exception
-     * @return void
-     */
-    public function getAction()
-    {
-        throw new \Exception("GET method not implemented for this URL");
-    }
-
-    /**
-     * Executes the requested post action.
-     *
-     * @throws \Exception
-     * @return void
-     */
-    public function postAction()
-    {
-        throw new \Exception("POST method not implemented for this URL");
-    }
-
-    /**
-     * Executes the requested put action.
-     *
-     * @throws \Exception
-     * @return void
-     */
-    public function putAction()
-    {
-        throw new \Exception("PUT method not implemented for this URL");
-    }
-
-    /**
-     * Executes the requested DELETE action.
-     *
-     * @throws \Exception
-     * @return void
-     */
-    public function deleteAction()
-    {
-        throw new \Exception("DELETE method not implemented for this URL");
-    }
 }
