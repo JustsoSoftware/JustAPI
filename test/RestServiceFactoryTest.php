@@ -177,7 +177,7 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
         return [
             ['application/json; charset=utf-8', '{"test": "123"}'],
             ['application/x-www-form-urlencoded', 'test=123&data=456'],
-            ['multipart/form-data, boundary=qwertz', <<<'DATA'
+            ['multipart/form-data; boundary=qwertz', <<<'DATA'
 --qwertz
 content-disposition: form-data; name="test"
 
