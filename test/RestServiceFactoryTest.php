@@ -175,21 +175,39 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
     public function provideContentType()
     {
         return [
-            ['application/json; charset=utf-8'],
-            ['application/x-www-form-urlencoded'],
-            ['multipart/form-data']
+            ['application/json; charset=utf-8', '{"test": "123"}'],
+            ['application/x-www-form-urlencoded', 'test=123&data=456'],
+            ['multipart/form-data, boundary=qwertz', <<<'DATA'
+--qwertz
+content-disposition: form-data; name="test"
+
+123
+--qwertz
+content-disposition: form-data; name="data"
+
+456
+--qwertz
+content-disposition: form-data; name="testfile"; filename="myTestFile.txt"
+Content-Type: text/plain
+Content-Transfer-Encoding: binary
+
+Content of the test file
+--qwertz--
+DATA
+]
         ];
     }
 
     /**
-     * @param $type
+     * @param string $type
+     * @param string $stdin
      * @dataProvider provideContentType
      */
-    public function testContentType($type)
+    public function testContentType($type, $stdin)
     {
         ServiceMock::reset();
         $request = new RequestHelper();
-        $request->set(array(), array('REQUEST_URI' => '/test', 'REQUEST_METHOD' => 'GET', 'CONTENT_TYPE' => $type));
+        $request->set([], ['REQUEST_URI' => '/test', 'REQUEST_METHOD' => 'GET', 'CONTENT_TYPE' => $type], $stdin);
         $environment = new TestEnvironment($request);
         $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\testutil\ServiceMock'));
         $factory->handleRequest();

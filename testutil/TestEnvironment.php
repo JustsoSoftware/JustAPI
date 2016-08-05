@@ -33,6 +33,9 @@ class TestEnvironment extends AbstractSystemEnvironment
      */
     private $header;
 
+    /** @var string */
+    private $stdin;
+
     /**
      * @var string[]
      */
@@ -54,10 +57,11 @@ class TestEnvironment extends AbstractSystemEnvironment
      * @param RequestHelper $request
      * @param string[] $header
      */
-    public function __construct(RequestHelper $request = null, array $header = array())
+    public function __construct(RequestHelper $request = null, array $header = array(), $stdin = '')
     {
         $this->request = $request;
         $this->header  = $header;
+        $this->stdin   = $stdin;
         parent::__construct();
         $this->session = new TestSession();
     }
@@ -191,5 +195,10 @@ class TestEnvironment extends AbstractSystemEnvironment
         /** @var FileSystemSandbox $fs */
         $fs = $this->getFileSystem();
         $fs->copyFromRealFS($this->getBootstrap()->getAppRoot() . $localPath);
+    }
+
+    public function getStdInput()
+    {
+        return $this->stdin;
     }
 }

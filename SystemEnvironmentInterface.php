@@ -99,4 +99,10 @@ interface SystemEnvironmentInterface
      * @return Bootstrap
      */
     public function getBootstrap();
+
+    /**
+     * Reads all from stdin
+     * @return string
+     */
+    public function getStdInput();
 }

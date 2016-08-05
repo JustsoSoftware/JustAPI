@@ -78,7 +78,7 @@ class RestServiceFactory
         $server = $this->environment->getRequestHelper()->getServerParams();
         $params = array();
         parse_str(isset($server['QUERY_STRING']) ? $server['QUERY_STRING'] : '', $params);
-        $body = file_get_contents("php://input");
+        $body = $this->environment->getStdInput();
         $content_type = isset($server['CONTENT_TYPE']) ? $server['CONTENT_TYPE'] : '';
         if (strchr($content_type, ';') !== false) {
             list($content_type) = preg_split('/;/', $content_type, 2);

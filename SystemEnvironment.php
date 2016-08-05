@@ -129,4 +129,9 @@ class SystemEnvironment extends AbstractSystemEnvironment
     {
         return $this->session;
     }
+
+    public function getStdInput()
+    {
+        return file_get_contents("php://input");
+    }
 }
