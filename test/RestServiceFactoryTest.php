@@ -172,20 +172,28 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('The request method is not defined in this service', $environment->getResponseContent());
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @return array
+     */
     public function provideContentType()
     {
         return [
             ['application/json; charset=utf-8', '{"test": "123"}'],
             ['application/x-www-form-urlencoded', 'test=123&data=456'],
-            ['multipart/form-data; boundary=qwertz', <<<'DATA'
+            ['multipart/form-data; boundary=qwertz', str_replace("\n", "\r\n", <<<'DATA'
 --qwertz
 content-disposition: form-data; name="test"
 
 123
 --qwertz
-content-disposition: form-data; name="data"
+content-disposition: form-data; name="data[]"
 
 456
+--qwertz
+content-disposition: form-data; name="data[]"
+
+789
 --qwertz
 content-disposition: form-data; name="testfile"; filename="myTestFile.txt"
 Content-Type: text/plain
@@ -193,8 +201,9 @@ Content-Transfer-Encoding: binary
 
 Content of the test file
 --qwertz--
+
 DATA
-            ]
+            )]
         ];
     }
 
@@ -207,9 +216,10 @@ DATA
     {
         ServiceMock::reset();
         $request = new RequestHelper();
-        $request->set([], ['REQUEST_URI' => '/test', 'REQUEST_METHOD' => 'GET', 'CONTENT_TYPE' => $type], $stdin);
-        $environment = new TestEnvironment($request);
+        $request->set([], ['REQUEST_URI' => '/test', 'REQUEST_METHOD' => 'GET', 'CONTENT_TYPE' => $type]);
+        $environment = new TestEnvironment($request, [], $stdin);
         $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\testutil\ServiceMock'));
         $factory->handleRequest();
+        $this->assertSame('', $environment->getResponseContent());
     }
 }

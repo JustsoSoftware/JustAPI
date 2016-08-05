@@ -205,7 +205,7 @@ class RestServiceFactory
         $params = [];
         $boundary = substr($body, 0, strpos($body, "\r\n"));
         foreach (array_slice(explode($boundary, $body), 1) as $part) {
-            if ($part == "--\r\n") {
+            if ($part === "--\r\n") {
                 break;
             }
             $part = ltrim($part, "\r\n");
