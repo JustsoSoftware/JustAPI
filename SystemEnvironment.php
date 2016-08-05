@@ -9,7 +9,9 @@
 
 namespace justso\justapi;
 
+// @codeCoverageIgnoreStart
 require_once(__DIR__ . "/AbstractSystemEnvironment.php");
+//@codeCoverageIgnoreEnd
 
 /**
  * Handles the outer world interface to the browser
