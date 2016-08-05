@@ -11,6 +11,7 @@
 namespace justso\justapi\testutil;
 
 use justso\justapi\RestService;
+use justso\justapi\SystemEnvironmentInterface;
 
 /**
  * Mocks a rest service
@@ -19,13 +20,13 @@ use justso\justapi\RestService;
  */
 class ServiceMock extends RestService
 {
-    public static $called = array(
+    public static $called = [
         'setName'      => 0,
         'getAction'    => 0,
         'postAction'   => 0,
         'putAction'    => 0,
         'deleteAction' => 0,
-    );
+    ];
 
     public static $lastName = '';
 
@@ -36,13 +37,13 @@ class ServiceMock extends RestService
 
     public static function reset()
     {
-        self::$called = array(
+        self::$called = [
             'setName'      => 0,
             'getAction'    => 0,
             'postAction'   => 0,
             'putAction'    => 0,
             'deleteAction' => 0,
-        );
+        ];
 
         self::$lastName = '';
         self::$exception = null;
@@ -54,7 +55,6 @@ class ServiceMock extends RestService
         parent::setName($serviceName);
         self::$lastName = $serviceName;
     }
-    // @codeCoverageIgnoreEnd
 
     public function getAction()
     {
@@ -62,32 +62,20 @@ class ServiceMock extends RestService
         if (self::$exception !== null) {
             throw new self::$exception;
         }
-        parent::getAction();
-        // @codeCoverageIgnoreStart
     }
-    // @codeCoverageIgnoreEnd
 
     public function postAction()
     {
         self::$called[__FUNCTION__]++;
-        parent::postAction();
-        // @codeCoverageIgnoreStart
     }
-    // @codeCoverageIgnoreEnd
 
     public function putAction()
     {
         self::$called[__FUNCTION__]++;
-        parent::putAction();
-        // @codeCoverageIgnoreStart
     }
-    // @codeCoverageIgnoreEnd
 
     public function deleteAction()
     {
         self::$called[__FUNCTION__]++;
-        parent::deleteAction();
-        // @codeCoverageIgnoreStart
     }
-    // @codeCoverageIgnoreEnd
 }
