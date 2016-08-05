@@ -194,7 +194,7 @@ Content-Transfer-Encoding: binary
 Content of the test file
 --qwertz--
 DATA
-]
+            ]
         ];
     }
 
