@@ -9,7 +9,8 @@
 
 namespace justso\justapi;
 
-use justso\justapi\testutil\FileSystemSandbox;
+use justso\justapi\testutil\MockClass;
+use justso\justapi\testutil\MockClass2;
 use justso\justapi\testutil\TestEnvironment;
 
 require_once(dirname(__DIR__) . '/testutil/MockClass.php');
@@ -23,29 +24,50 @@ require_once(dirname(__DIR__) . '/testutil/MockClass2.php');
 class DICTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Bootstrap
+     * @var DependencyContainer
      */
-    private $bootstrap;
+    private $dic;
 
-    public function testInstantiation()
+    public function setUp()
     {
-        $request = new RequestHelper();
-        $env = new TestEnvironment($request);
-        $config = array('environments' => array('test' => array('approot' => '/test')));
-        $env->getBootstrap()->setTestConfiguration('/test', $config);
+        parent::setUp();
+        $env = new TestEnvironment(new RequestHelper());
+        $this->dic = $env->getDIC();
+    }
 
-        /** @var FileSystemSandbox $fs */
-        $fs = $env->getFileSystem();
-        $fs->copyFromRealFS(dirname(__DIR__) . '/testutil/TestDICConfig.php', '/test/conf/dependencies.php');
-        $env = new DependencyContainer($env);
-
-        $object = $env->newInstanceOf('TestClassName');
+    public function testInstantiationWithUnregisteredClassName()
+    {
+        $object = $this->dic->get('justso\justapi\testutil\MockClass2');
         $this->assertInstanceOf('justso\justapi\testutil\MockClass2', $object);
+    }
 
-        $object = $env->newInstanceOf('TestFactory');
+    public function testInstantiationWithRegisteredClassName()
+    {
+        $this->dic->setDICEntry('TestClassName', 'justso\justapi\testutil\MockClass2');
+        $object = $this->dic->get('TestClassName');
+        $this->assertInstanceOf('justso\justapi\testutil\MockClass2', $object);
+    }
+
+    public function testInstantiationWithFactory()
+    {
+        $this->dic->setDICEntry('TestFactory', function () {
+            /** @var MockClass2 $object */
+            $object = $this->dic->get('justso\justapi\testutil\MockClass2');
+            return new MockClass($object);
+        });
+        $object = $this->dic->get('TestFactory');
         $this->assertInstanceOf('justso\justapi\testutil\MockClass', $object);
-
-        $object = $env->newInstanceOf('TestObject');
+    }
+    public function testInstantiationWithObject()
+    {
+        $this->dic->setDICEntry('TestObject', new MockClass2());
+        $object = $this->dic->get('TestObject');
         $this->assertInstanceOf('justso\justapi\testutil\MockClass2', $object);
+    }
+
+    public function testArguments()
+    {
+        $object = $this->dic->get('justso\justapi\testutil\MockClass2', ['test', 4711]);
+        $this->assertSame(['test', 4711], $object->myParams);
     }
 }
