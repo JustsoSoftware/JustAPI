@@ -11,7 +11,6 @@
 namespace justso\justapi\testutil;
 
 use justso\justapi\RestService;
-use justso\justapi\SystemEnvironmentInterface;
 
 /**
  * Mocks a rest service

@@ -97,6 +97,7 @@ class DependencyContainer implements DependencyContainerInterface
             $appRoot = $this->env->getBootstrap()->getAppRoot();
             $fs = $this->env->getFileSystem();
             if ($fs->fileExists($appRoot . $localPath)) {
+                /** @noinspection PhpIncludeInspection */
                 $this->config = require_once($fs->getRealPath($appRoot . $localPath));
             }
         }

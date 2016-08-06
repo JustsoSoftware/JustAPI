@@ -32,6 +32,9 @@ class Bootstrap
 
     /**
      * Initializes the Bootstrap configuration.
+     * @param string|null $appRoot
+     * @param array $config
+     * @throws InvalidParameterException
      */
     public function __construct($appRoot = null, array $config = null)
     {
@@ -137,6 +140,7 @@ class Bootstrap
 
     /**
      * Sets a new site configuration
+     * @param $config
      */
     public function setConfiguration($config)
     {

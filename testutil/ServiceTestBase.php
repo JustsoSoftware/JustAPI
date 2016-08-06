@@ -9,7 +9,6 @@
 
 namespace justso\justapi\testutil;
 
-use justso\justapi\Bootstrap;
 use justso\justapi\RequestHelper;
 
 /**

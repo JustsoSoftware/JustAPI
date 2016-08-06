@@ -154,6 +154,7 @@ class Autoloader
             $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . $this->fileExtension;
             $filePath  = stream_resolve_include_path($this->includePath . DIRECTORY_SEPARATOR . $fileName);
             if ($filePath) {
+                /** @noinspection PhpIncludeInspection */
                 require $filePath;
                 $found = true;
             }

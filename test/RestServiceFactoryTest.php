@@ -59,6 +59,7 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Tests that requested service methods are called
      * @dataProvider methodProvider
+     * @param string $method
      */
     public function testCallOfService($method)
     {

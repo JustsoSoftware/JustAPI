@@ -83,6 +83,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider provideInvalidConfigurations
      * @expectedException \justso\justapi\InvalidParameterException
+     * @param $config
      */
     public function testSetTestConfigurationWithIncompleteConfiguration($config)
     {

@@ -56,6 +56,7 @@ class TestEnvironment extends AbstractSystemEnvironment
     /**
      * @param RequestHelper $request
      * @param string[] $header
+     * @param string $stdin
      */
     public function __construct(RequestHelper $request = null, array $header = array(), $stdin = '')
     {

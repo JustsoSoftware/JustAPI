@@ -120,6 +120,8 @@ class RequestHelperTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideParameterTestingFunctionNames
      * @expectedException \justso\justapi\InvalidParameterException
+     * @param string $func
+     * @param string $val
      */
     public function testThrowsExceptionWhenUsedWithWrongParameter($func, $val)
     {
