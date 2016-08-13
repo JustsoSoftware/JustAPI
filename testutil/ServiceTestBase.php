@@ -10,13 +10,14 @@
 namespace justso\justapi\testutil;
 
 use justso\justapi\RequestHelper;
+use justso\justauth\UserInterface;
 
 /**
  * Base class for service tests
  *
  * @package    justso\test
  */
-abstract class ServiceTestBase extends \PHPUnit_Framework_TestCase
+abstract class ServiceTestBase extends \PHPUnit\Framework\TestCase
 {
     /** @var TestEnvironment */
     protected $env;
@@ -108,5 +109,14 @@ abstract class ServiceTestBase extends \PHPUnit_Framework_TestCase
         }
 
         return $headers;
+    }
+
+    protected function mockAuthenticatedUser(UserInterface $user = null)
+    {
+        $auth = $this->createMock('\justso\justauth\Authenticator');
+        $auth->expects($this->any())->method('isAuth')->willReturn($user !== null);
+        $auth->expects($this->any())->method('getUser')->willReturn($user);
+        $this->env->setDICEntry('Authenticator', $auth);
+        return $user;
     }
 }
