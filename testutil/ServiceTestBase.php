@@ -117,6 +117,5 @@ abstract class ServiceTestBase extends \PHPUnit\Framework\TestCase
         $auth->expects($this->any())->method('isAuth')->willReturn($user !== null);
         $auth->expects($this->any())->method('getUser')->willReturn($user);
         $this->env->setDICEntry('Authenticator', $auth);
-        return $user;
     }
 }
