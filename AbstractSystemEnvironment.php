@@ -44,6 +44,7 @@ abstract class AbstractSystemEnvironment implements SystemEnvironmentInterface, 
         }
 
         $this->dic = new DependencyContainer($this);
+        setlocale(LC_ALL, empty($config['locale']) ? 'de_DE.UTF-8' : $config['locale']);
     }
 
     /**
