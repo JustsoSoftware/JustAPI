@@ -36,10 +36,12 @@ class TestEnvironment extends AbstractSystemEnvironment
     /** @var string */
     private $stdin;
 
+    private $responseCode;
+
     /**
      * @var string[]
      */
-    private $responseHeader = array();
+    private $responseHeader = [];
 
     /**
      * @var string
@@ -88,7 +90,12 @@ class TestEnvironment extends AbstractSystemEnvironment
      */
     public function sendHeader($header)
     {
-        $this->responseHeader[] = $header;
+        $comp = explode(':', $header, 2);
+        if (isset($comp[1])) {
+            $this->responseHeader[] = trim($comp[0]) . ': ' . trim($comp[1]);
+        } else {
+            $this->responseCode = $header;
+        }
     }
 
     /**
@@ -112,7 +119,31 @@ class TestEnvironment extends AbstractSystemEnvironment
      */
     public function getResponseHeader()
     {
+        $header = $this->responseHeader;
+        array_unshift($header, $this->responseCode);
+        return $header;
+    }
+
+    public function getResponseHeaderList()
+    {
         return $this->responseHeader;
+    }
+
+    public function getResponseCode()
+    {
+        return $this->responseCode;
+    }
+
+    public function getResponseHeaderEntries($key)
+    {
+        $result = [];
+        foreach ($this->responseHeader as $row) {
+            $comp = explode(':', $row, 2);
+            if (trim($comp[0]) === $key) {
+                $result[] = trim($comp[1]);
+            }
+        }
+        return $result;
     }
 
     /**
@@ -122,6 +153,7 @@ class TestEnvironment extends AbstractSystemEnvironment
     {
         $this->responseContent = '';
         $this->responseHeader = array();
+        $this->responseCode = '200 Ok';
     }
 
     /**

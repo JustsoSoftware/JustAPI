@@ -29,22 +29,20 @@ abstract class ServiceTestBase extends \PHPUnit\Framework\TestCase
      */
     protected function assertJSONHeader(TestEnvironment $environment)
     {
-        $header = $this->parseHttpHeaders($environment->getResponseHeader());
-        $this->assertSame('HTTP/1.0 200 Ok', $header[0]);
-        $this->assertSame('application/json; charset=utf-8', $header['Content-Type']);
+        $this->assertSame('HTTP/1.0 200 Ok', $environment->getResponseCode());
+        $this->assertSame(['application/json; charset=utf-8'], $environment->getResponseHeaderEntries('Content-Type'));
     }
 
     /**
      * Sets up a test environment.
-     *
-     * @param array $params
-     * @param array $header
-     * @return TestEnvironment
      */
-    protected function createTestEnvironment(array $params = array(), array $header = array())
+    protected function createTestEnvironment(array $params = [], array $header = [], array $server = [])
     {
         $request = new RequestHelper();
-        $request->fillWithData($params, array('HTTP_HOST' => 'localhost'));
+        if (!isset($server['HTTP_HOST'])) {
+            $server['HTTP_HOST'] = 'localhost';
+        }
+        $request->fillWithData($params, $server);
         $this->env = new TestEnvironment($request, $header);
         $this->env->copyFromRealFS('/conf/dependencies.php');
         return $this->env;
@@ -79,8 +77,8 @@ abstract class ServiceTestBase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array $raw_headers
-     * @return array
+     * @return \string[]
+     * @deprecated use $this->env->getResponseCode() and $this->env->getResponseHeaderList() explicitly instead
      */
     protected function parseHttpHeaders(array $raw_headers)
     {
