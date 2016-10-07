@@ -14,6 +14,5 @@ namespace justso\justapi;
  */
 interface DependencyContainerInterface
 {
-    public function newInstanceOf($name);
     public function get($name, array $arguments = null);
 }

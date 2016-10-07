@@ -36,10 +36,11 @@ abstract class AbstractSystemEnvironment implements SystemEnvironmentInterface, 
         if (file_exists($vendorPath . '/autoload.php')) {
             require_once($vendorPath . '/autoload.php');
         }
+        $appRoot = dirname($vendorPath);
         $config = $this->bootstrap->getConfiguration();
-        $packages = array_merge(array('justso'), !empty($config['packages']) ? $config['packages'] : []);
-        foreach ($packages as $package) {
-            $autoloader = new Autoloader($package, $vendorPath);
+        $packages = array_merge(['justso' => '/vendor'], !empty($config['packages']) ? $config['packages'] : []);
+        foreach ($packages as $package => $path) {
+            $autoloader = new Autoloader($package, $appRoot . $path);
             $autoloader->register();
         }
 
@@ -69,19 +70,6 @@ abstract class AbstractSystemEnvironment implements SystemEnvironmentInterface, 
     public function sendJSONResult($data)
     {
         $this->sendResult('200 Ok', 'application/json; charset=utf-8', json_encode($data));
-    }
-
-    /**
-     * Create new objects of a class or interface with this method.
-     * It uses a mapping table to map the given $name to a implementing class, thus providing a kind of DIC.
-     *
-     * @param string $name
-     * @return object
-     * @deprecated Use ->getDIC()->get() instead
-     */
-    public function newInstanceOf($name)
-    {
-        return $this->dic->newInstanceOf($name);
     }
 
     public function get($name, array $arguments = null)

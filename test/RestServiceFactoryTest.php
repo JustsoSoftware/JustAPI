@@ -64,9 +64,9 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCallOfService($method)
     {
         $request = new RequestHelper();
-        $request->set(array(), array('PATH_INFO' => '/test', 'REQUEST_METHOD' => $method));
+        $request->set(array(), array('REQUEST_URI' => '/api/test', 'REQUEST_METHOD' => $method));
         $environment = new TestEnvironment($request);
-        $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\testutil\ServiceMock'));
+        $factory = new RestServiceFactory($environment, array('/api/test' => '\justso\justapi\testutil\ServiceMock'));
         $factory->handleRequest();
         $this->assertSame(1, ServiceMock::$called[strtolower($method) . 'Action']);
     }
@@ -77,11 +77,11 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
     public function testWildcardService()
     {
         $request = new RequestHelper();
-        $request->set(array(), array('PATH_INFO' => '/test/123', 'REQUEST_METHOD' => 'GET'));
+        $request->set(array(), array('REQUEST_URI' => '/api/test/123', 'REQUEST_METHOD' => 'GET'));
         $environment = new TestEnvironment($request);
-        $factory = new RestServiceFactory($environment, array('test/*' => '\justso\justapi\testutil\ServiceMock'));
+        $factory = new RestServiceFactory($environment, array('/api/test/*' => '\justso\justapi\testutil\ServiceMock'));
         $factory->handleRequest();
-        $this->assertSame('test/123', ServiceMock::$lastName);
+        $this->assertSame('/api/test/123', ServiceMock::$lastName);
     }
 
     /**
@@ -110,14 +110,14 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
     public function testServiceFactoryCatchesExceptions($exception, $errCode)
     {
         $request = new RequestHelper();
-        $request->set(array(), array('PATH_INFO' => '/test', 'REQUEST_METHOD' => 'GET'));
+        $request->set(array(), array('REQUEST_URI' => '/test', 'REQUEST_METHOD' => 'GET'));
         $environment = new TestEnvironment($request);
-        $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\testutil\ServiceMock'));
+        $factory = new RestServiceFactory($environment, array('/test' => '\justso\justapi\testutil\ServiceMock'));
         ServiceMock::$exception = $exception;
         $factory->handleRequest();
-        $header = $environment->getResponseHeader();
-        $this->assertTrue(in_array('Content-Type: text/plain; charset=utf-8', $header));
-        $this->assertTrue(in_array('HTTP/1.0 ' . $errCode, $header));
+        $this->assertSame('HTTP/1.0 ' . $errCode, $environment->getResponseCode(), $environment->getResponseContent());
+        $header = $environment->getResponseHeaderEntries('Content-Type');
+        $this->assertSame(['text/plain; charset=utf-8'], $header, $environment->getResponseContent());
     }
 
     /**
@@ -126,24 +126,13 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
     public function testInvalidServiceName()
     {
         $request = new RequestHelper();
-        $request->set(array(), array('PATH_INFO' => '/invalid', 'REQUEST_METHOD' => 'GET'));
+        $request->set(array(), array('REQUEST_URI' => '/invalid', 'REQUEST_METHOD' => 'GET'));
         $environment = new TestEnvironment($request);
-        $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\testutil\ServiceMock'));
+        $factory = new RestServiceFactory($environment, array('/test' => '\justso\justapi\testutil\ServiceMock'));
         $factory->handleRequest();
         $header = $environment->getResponseHeader();
         $this->assertTrue(in_array('Content-Type: text/plain; charset=utf-8', $header));
         $this->assertTrue(in_array('HTTP/1.0 500 Server error', $header));
-    }
-
-    public function testServerUsesRequestUri()
-    {
-        ServiceMock::reset();
-        $request = new RequestHelper();
-        $request->set(array(), array('REQUEST_URI' => '/test', 'REQUEST_METHOD' => 'GET'));
-        $environment = new TestEnvironment($request);
-        $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\testutil\ServiceMock'));
-        $factory->handleRequest();
-        $this->assertSame(1, ServiceMock::$called['getAction']);
     }
 
     public function testMissingRequestMethod()
@@ -151,7 +140,7 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $request = new RequestHelper();
         $request->set(array(), array('REQUEST_URI' => '/test'));
         $environment = new TestEnvironment($request);
-        $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\testutil\ServiceMock'));
+        $factory = new RestServiceFactory($environment, array('/test' => '\justso\justapi\testutil\ServiceMock'));
         $factory->handleRequest();
         $header = $environment->getResponseHeader();
         $this->assertTrue(in_array('Content-Type: text/plain; charset=utf-8', $header));
@@ -165,7 +154,7 @@ class RestServiceFactoryTest extends \PHPUnit_Framework_TestCase
         $request = new RequestHelper();
         $request->set(array(), array('REQUEST_URI' => '/test', 'REQUEST_METHOD' => 'UNDEFINED'));
         $environment = new TestEnvironment($request);
-        $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\testutil\ServiceMock'));
+        $factory = new RestServiceFactory($environment, array('/test' => '\justso\justapi\testutil\ServiceMock'));
         $factory->handleRequest();
         $header = $environment->getResponseHeader();
         $this->assertTrue(in_array('Content-Type: text/plain; charset=utf-8', $header));
@@ -219,7 +208,7 @@ DATA
         $request = new RequestHelper();
         $request->set([], ['REQUEST_URI' => '/test', 'REQUEST_METHOD' => 'GET', 'CONTENT_TYPE' => $type]);
         $environment = new TestEnvironment($request, [], $stdin);
-        $factory = new RestServiceFactory($environment, array('test' => '\justso\justapi\testutil\ServiceMock'));
+        $factory = new RestServiceFactory($environment, array('/test' => '\justso\justapi\testutil\ServiceMock'));
         $factory->handleRequest();
         $this->assertSame('', $environment->getResponseContent());
     }

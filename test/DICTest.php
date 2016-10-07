@@ -70,4 +70,18 @@ class DICTest extends \PHPUnit_Framework_TestCase
         $object = $this->dic->get('justso\justapi\testutil\MockClass2', ['test', 4711]);
         $this->assertSame(['test', 4711], $object->myParams);
     }
+
+    public function testSingleton()
+    {
+        $this->dic->setDICEntry('Singleton', $this->dic->singleton(MockClass2::class, [2, 3]));
+        $object = $this->dic->get('Singleton');
+        $this->assertInstanceOf(MockClass2::class, $object);
+        $this->assertSame([2, 3], $object->myParams);
+        $other = $this->dic->get('Singleton');
+        $this->assertSame($object, $other);
+        $this->dic->setDICEntry('SecondSingleton', $this->dic->singleton(MockClass2::class, [2, 3]));
+        $second = $this->dic->get('SecondSingleton');
+        $this->assertInstanceOf(MockClass2::class, $second);
+        $this->assertNotSame($object, $second);
+    }
 }

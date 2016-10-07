@@ -79,16 +79,6 @@ interface SystemEnvironmentInterface
     public function getSession();
 
     /**
-     * Create new objects of a class or interface with this method.
-     * It uses a mapping table to map the given $name to a implementing class, thus providing a kind of DIC.
-     *
-     * @param string $name
-     * @return object
-     * @deprecated Use ->getDIC()->newInstanceOf() instead
-     */
-    public function newInstanceOf($name);
-
-    /**
      * Returns the dependency injection container
      *
      * @return DependencyContainerInterface

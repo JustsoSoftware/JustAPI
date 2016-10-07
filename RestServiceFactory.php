@@ -50,7 +50,7 @@ class RestServiceFactory
     {
         try {
             $server = $this->environment->getRequestHelper()->getServerParams();
-            $serviceName = preg_replace('/^\/(.*?)(\?.*)?$/', '$1', $this->getURI($server));
+            $serviceName = preg_replace('/^(.*?)(\?.*)?$/', '$1', $this->getURI($server));
             $className = $this->findServiceClassName($this->services, $serviceName);
             $method = $this->getMethod($server);
             $this->handleAllowedOrigins();
@@ -178,14 +178,10 @@ class RestServiceFactory
      */
     private function getURI($server)
     {
-        if (!empty($server['PATH_INFO'])) {
-            $uri = $server['PATH_INFO'];
-        } elseif (!empty($server['REQUEST_URI'])) {
-            $uri = $server['REQUEST_URI'];
-        } else {
+        if (empty($server['REQUEST_URI'])) {
             throw new InvalidParameterException("Missing information about service URI");
         }
-        return $uri;
+        return $server['REQUEST_URI'];
     }
 
     private function parseApplicationFormUrlEncoded($body)
